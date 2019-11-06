@@ -1,0 +1,104 @@
+#!/usr/bin/env node
+
+const omskep = require('../src/omskeplib.js')
+const fs = require('fs');
+const path = require('path');
+
+const usage = 'omskep <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]';
+let Diagram = omskep.Diagram;
+let data = '';
+
+/**
+* processes args and data to determine the output
+* @param {array} cargs - cli args
+* @param {string} data - data of the input file or from pipe
+*/
+function handleCli(cargs, data = '') {
+
+    let args = [];
+    let opts = [];
+
+    //
+    // Valid cli args use cases
+    //   omskep sequence filename
+    //   omskep sequence -option1 val1 -option2 val2... filename
+    //   cat filename | omskep sequence
+    //   cat filename | omskep sequence -option1 val1 -option2 val2...
+    //
+    for (let index = 2; index < cargs.length; index++) {
+        if (cargs[index].charAt(0) === '-') {
+            if ((cargs[index+1]) && (cargs[index+1].charAt(0) === '-')) {
+                console.error(usage);
+                process.exit(1);
+            }
+            opts.push({key: cargs[index], value: cargs[index+1]});
+            index++;
+        } else {
+            args.push(cargs[index]);
+        }
+    }
+    console.dir(opts);
+    console.dir(args);
+
+    //
+    // Assume if no data, then a filename was given on cli instead of pipe
+    //
+    if (data === '') {
+        if (args.length < 2) {
+            console.error(usage);
+            process.exit(1);
+        }
+    }
+    console.dir(args);
+    let type = '';
+    switch(type) {
+        case 'sequence':
+            console.log('SEQ');
+            break;
+        case 'class':
+            console.log('CLASS');
+            break;
+        case 'wps':
+            console.log('WPS');
+            break;
+        case 'mindmap':
+            console.log('MIND');
+            break;   
+    } 
+    // console.log('DATA :' + data);
+    console.log('TYPE :' + type);
+    let d = new Diagram(data);
+    console.log(d.getPaths());
+    console.log(d.getAllHttpMethods());
+}
+//
+// Note: there might be cases when the TTY check might not really work, if it is run
+// in an environment that is not attached to a TTY, and the invocation is incorrect
+// in that case the 3rd branch will be active, but not correct. Need to perhaps put 
+// a timeout on that
+//
+if (process.argv.length < 3) {
+    console.log(usage);
+    process.exit(1);
+} else if ((process.argv.length < 4) & (process.stdin.isTTY))  {
+    console.log(usage);
+    process.exit(1);
+} else if (process.argv.length < 4)  {
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('readable', function() {
+        let chunk;
+        while ((chunk = process.stdin.read()) !== null) {
+            data += chunk;
+        }
+    });
+    process.stdin.on('end', function() {
+        handleCli(process.argv, data);
+    });
+} else {
+    // data = fs.readFileSync(process.argv[3], 'utf8');
+    handleCli(process.argv);
+}
+
+// const plantumlEncoder = require('plantuml-encoder');
+
+
