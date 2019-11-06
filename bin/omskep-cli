@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const omskep = require('../src/omskeplib.js')
+const puml = require('../src/omskep-puml.js')
 const fs = require('fs');
 const path = require('path');
 
 const usage = 'omskep <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]';
-let Diagram = omskep.Diagram;
+let Puml = puml.Puml;
 let data = '';
 
 /**
@@ -40,6 +40,8 @@ function handleCli(cargs, data = '') {
     console.dir(opts);
     console.dir(args);
 
+
+
     //
     // Assume if no data, then a filename was given on cli instead of pipe
     //
@@ -48,9 +50,9 @@ function handleCli(cargs, data = '') {
             console.error(usage);
             process.exit(1);
         }
+        data = fs.readFileSync(args[1], 'utf8');
     }
-    console.dir(args);
-    let type = '';
+    let type = args[0];
     switch(type) {
         case 'sequence':
             console.log('SEQ');
@@ -67,7 +69,7 @@ function handleCli(cargs, data = '') {
     } 
     // console.log('DATA :' + data);
     console.log('TYPE :' + type);
-    let d = new Diagram(data);
+    let d = new Puml(data);
     console.log(d.getPaths());
     console.log(d.getAllHttpMethods());
 }
