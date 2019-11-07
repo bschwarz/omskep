@@ -32,13 +32,14 @@ function handleCli(data = '') {
     
     switch(args[0]) {
         case 'sequence':
-            
-            console.log('SEQ');
             if (!opts['path'] || !opts['verb']) {
                 console.error('Error: Sequence diagrams need the -path and -verb options specified.');
                 process.exit(1);
             }
             const d = new Puml(data);
+            if (opts['title']) {
+                d.title = opts['title'];
+            }
             ret = d.sequence(opts);
             break;
         case 'class':
