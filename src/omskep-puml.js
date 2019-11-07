@@ -78,7 +78,7 @@ class Puml extends Diagram {
     * @param {string} status - The HTTP status code
     */
     getStatusFunction(status) {
-        return status.charAt(0) === '2' ? '$success('+status+')' : (status.charAt(0) === '3' ? '$warning('+status+')' : '$failure('+status+')');
+        return status.charAt(0) === '2' ? '$success("'+status+'")' : (status.charAt(0) === '3' ? '$warning("'+status+'")' : '$failure("'+status+'")');
     }
 
 
@@ -118,7 +118,7 @@ class Puml extends Diagram {
         let ret = '';
 
         if (opid) {
-            ret = this.title ?  t1 : (this.title === null ? opid : t3);
+            ret = this.title ?  t1 : (this.title === null ? `title ${opid}` : t3);
         } else {
             ret = this.title ?  t1 : (this.title === null ? t2 : t3);
         }
