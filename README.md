@@ -2,23 +2,26 @@
 Assists in the generatation of diagrams (png, svg, canvas, etc) based on standard file formats, such as Swagger, OpenAPI, AWS Cloud Formation Templates, Ansible Templates, by providing the text markdown for renderers to take advantage of.
 
 # Usage
-~~~
-omskep <diagram type> [options] filename
-~~~
 
-* Command line (CLI)
 
-  ### Basic invocation
+## Command line (CLI)
+  
+  #### CLI Usage
+  ~~~
+  omskep <diagram type> [options] filename
+  ~~~
+
+  #### Basic invocation
   ~~~
   omskep-cli sequence -path /pets -verb get petstore.json
   ~~~
   
-    ### Pipe contents into the CLI
+  #### Pipe contents into the CLI
   ~~~
    cat petstore.json | omskep-cli sequence -path /pets -verb get -server %title% 
   ~~~
   
-  ### Output
+  #### Output
   ~~~
   @startuml
   !GET = "<color #009fdb>GET</color>"
@@ -61,10 +64,14 @@ omskep <diagram type> [options] filename
 
   ~~~
   
-  ### Getting image (plantuml)
+  #### Getting image (plantuml)
   ~~~
-  omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar > getPets.png
+  omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
   ~~~
+  
+  #### Output
+  ![getPets Diagram](getPets.png)
+  
 
 * Node.js
 * JavaScript (Browser)
