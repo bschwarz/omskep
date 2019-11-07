@@ -113,7 +113,6 @@ if (args.length < 1) {
     });
 } else {
     // data = fs.readFileSync(process.argv[3], 'utf8');
-    console.log('FILE');
     console.log(handleCli(''));
 }
 
