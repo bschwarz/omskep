@@ -108,6 +108,20 @@ class Puml extends Diagram {
     }
 
     /**
+    * Determines the title to use, if any
+    * @param {string} opid - optional, operationId if diagram might have operationId in title
+    */
+    getTitle(opid = '') {
+        let t1 = `title ${this.title}`;
+        let t2 = `title ${this.defn.info.title} ${this.defn.info.version}`;
+        let t3 = '';
+        let ret = '';
+
+        ret = this.title ?  t1 : (this.title === null ? t2 : t3);
+        return this.substVariables(ret, opid);
+    }
+
+    /**
     * Generates the mindmap markdown, include start/end tags and any configs
     * @param {boolean} versionSeparate - should the version be in a separate node (true)? Or concatenated with API name (false)?
     */
@@ -282,6 +296,7 @@ class Puml extends Diagram {
     sequence(params) {
         let ret = '@startuml\n';
         let statuses = this.getStatusCodes(params.path, params.verb);
+        let opid = this.getOperationId(params.path, params.verb);
         
 
         if (this.configFile != '') {
@@ -302,10 +317,7 @@ class Puml extends Diagram {
             ret += statuses.sort().map(x => `| ${this.getStatusFunction(x)} | ${Diagram.statuscodes.find(y => y.code === x).reasonphrase} |`).join('\n');
             ret += '\nendlegend\n\n'
         }
-        if (this.title) {
-            let s = this.substVariables(this.title);
-            ret += 'title ' + s.replace('%operationid%', this.getOperationId(params.path, params.verb)) + '\n\n';
-        }
+        ret += this.getTitle(opid) + '\n\n';
 
         // params.verb = (!params.verb) ? 'get' : params.verb;
         params.client = (!params.client) ? 'Client' : params.client;
@@ -427,12 +439,16 @@ class Puml extends Diagram {
     /**
     * Substitutes variables with values from the input file
     * @param {string} str - string that needs variables replaced
+    * @param {string} opid - optional, the operationId in case operationId needs substitution
     */
-    substVariables(str) {
+    substVariables(str, opid = '') {
         let map = {};
         map['%apiname%'] = this.defn.info.title;
         map['%title%'] = this.defn.info.title;
         map['%version%'] = this.defn.info.version;
+        if (opid != '') {
+            map['%operationid%'] = opid;
+        }
         let re = new RegExp(Object.keys(map).join("|"),"gi");
 
         return str.replace(re, (matched) => {
