@@ -69,15 +69,13 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
   omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
   ~~~
   
-  #### Output
   ![getPets Diagram](getPets.png)
   
-  ##### with theme
+  #### Getting image with theme (plantuml)
   ~~~
   omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets.png
   ~~~
   
-  #### Output
   ![getPets Cerulean Diagram](getPets-cerulean.png)
   
 
