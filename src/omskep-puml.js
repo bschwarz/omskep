@@ -12,10 +12,11 @@ class Puml extends Diagram {
         this.configs = {mindmap: '', wbs: '', class: '', global: ''};
         this._configfile = '';
         this._newStyle = false;
-        this._showTitle = false;
+        this._title = null;
         this._showLegend = false;
         this.value = '';
     }
+    
     /**
     * Getter that gets the config file (!include file)
     */
@@ -44,18 +45,18 @@ class Puml extends Diagram {
         this._newStyle = bool;
     }
     /**
-    * Getter that gets the boolean value for showTitle
+    * Getter that gets the boolean value for title
     */
-    get showTitle() {
-        return this._showTitle;
+    get title() {
+        return this._title;
     }
 
     /**
-    * Setter that sets the boolean value for showTitle
-    * @param {boolean} value - The boolean value to assign to the showTitle property
+    * Setter that sets the boolean value for title
+    * @param {boolean} value - The boolean value to assign to the title property
     */
-    set showTitle(value) {
-        this._showTitle = value;
+    set title(value) {
+        this._title = value;
     }
     /**
     * Getter that gets the boolean value for showLegend
@@ -71,18 +72,6 @@ class Puml extends Diagram {
     set showLegend(value) {
         this._showLegend = value;
     }
-    // /**
-    // * Getter that returns the colors associated with the HTTP methods (verbs) 
-    // */
-    // static get httpMethodColors() {
-    //     return Diagram.httpMethodColors.map(x => `!${x.heading} = "<color ${x.color}>${x.heading}</color>"`).join('\n');
-    // }
-    // /**
-    // * Getter that returns the puml functions for success, warning and failure cases
-    // */
-    // static get statusFunctions() {
-    //         return `!if %not(%function_exists("$success"))\n!function $success($msg)\n<font color=green><b>$msg\n!endfunction\n!endif\n!if %not(%function_exists("$failure"))\n!function $failure($msg)\n<font color=red><b>$msg\n!endfunction\n!endif\n!if %not(%function_exists("$warning"))\n!function $warning($msg)\n<font color=orange><b>$msg\n!endfunction\n!endif`;
-    // }
 
     /**
     * returns the puml correct success/warning/failure depending on the status code
@@ -135,7 +124,7 @@ class Puml extends Diagram {
         ret += Puml.httpMethodColors + '\n';
         ret += this.skinparam('global');
         ret += this.skinparam('mindmap');
-        if (this.showTitle) {
+        if (this.title) {
             ret += `title ${this.defn.info.title} ${this.defn.info.version}\n`;
         }
         if (versionSeparate) {
@@ -168,7 +157,7 @@ class Puml extends Diagram {
         }
         ret += this.skinparam('global');
         ret += this.skinparam('wbs');
-        if (this.showTitle) {
+        if (this.title) {
             ret += `title ${this.defn.info.title} ${this.defn.info.version}\n`;
         }
         if (versionSeparate) {
@@ -197,7 +186,7 @@ class Puml extends Diagram {
         ret += 'hide empty members\n';
         ret += this.skinparam('global');
         ret += this.skinparam('class');
-        if (this.showTitle) {
+        if (this.title) {
             ret += `title ${this.defn.info.title} ${this.defn.info.version}\n`;
         }
 
@@ -313,8 +302,9 @@ class Puml extends Diagram {
             ret += statuses.sort().map(x => `| ${this.getStatusFunction(x)} | ${Diagram.statuscodes.find(y => y.code === x).reasonphrase} |`).join('\n');
             ret += '\nendlegend\n\n'
         }
-        if (this.showTitle) {
-            ret += 'title ' + this.getOperationId(params.url, params.verb) + '\n\n';
+        if (this.title) {
+            let s = this.substVariables(this.title);
+            ret += 'title ' + s.replace('%operationid%', this.getOperationId(params.path, params.verb)) + '\n\n';
         }
 
         // params.verb = (!params.verb) ? 'get' : params.verb;
@@ -326,8 +316,9 @@ class Puml extends Diagram {
         ret += `participant "${params.gw}" as G\n`;
         
         if (params.server) {
-            params.server = params.server.replace('%apiname%', this.defn.info.title);
-            params.server= params.server.replace('%version%', this.defn.info.version);
+            // params.server = params.server.replace('%apiname%', this.defn.info.title);
+            // params.server= params.server.replace('%version%', this.defn.info.version);
+            params.server = this.substVariables(params.server);
             ret += `participant "${params.server}" as B\n`;
         }
 
@@ -432,7 +423,22 @@ class Puml extends Diagram {
         }
         return str;
     }
-    
+
+    /**
+    * Substitutes variables with values from the input file
+    * @param {string} str - string that needs variables replaced
+    */
+    substVariables(str) {
+        let map = {};
+        map['%apiname%'] = this.defn.info.title;
+        map['%title%'] = this.defn.info.title;
+        map['%version%'] = this.defn.info.version;
+        let re = new RegExp(Object.keys(map).join("|"),"gi");
+
+        return str.replace(re, (matched) => {
+            return map[matched.toLowerCase()];
+        });
+    }
 }
 
 /**
