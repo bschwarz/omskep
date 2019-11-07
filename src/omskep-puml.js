@@ -117,7 +117,12 @@ class Puml extends Diagram {
         let t3 = '';
         let ret = '';
 
-        ret = this.title ?  t1 : (this.title === null ? t2 : t3);
+        if (opid) {
+            ret = this.title ?  t1 : (this.title === null ? opid : t3);
+        } else {
+            ret = this.title ?  t1 : (this.title === null ? t2 : t3);
+        }
+        
         return this.substVariables(ret, opid);
     }
 
@@ -319,7 +324,6 @@ class Puml extends Diagram {
         }
         ret += this.getTitle(opid) + '\n\n';
 
-        // params.verb = (!params.verb) ? 'get' : params.verb;
         params.client = (!params.client) ? 'Client' : params.client;
         params.gw = (!params.gw) ? 'API Gateway' : params.gw;
         // params.autonumber = (!params.autonumber) ? false : params.gw;
@@ -328,8 +332,6 @@ class Puml extends Diagram {
         ret += `participant "${params.gw}" as G\n`;
         
         if (params.server) {
-            // params.server = params.server.replace('%apiname%', this.defn.info.title);
-            // params.server= params.server.replace('%version%', this.defn.info.version);
             params.server = this.substVariables(params.server);
             ret += `participant "${params.server}" as B\n`;
         }
@@ -340,7 +342,6 @@ class Puml extends Diagram {
             ret += `G->B: request to API service\n`;
             ret += `B-->G: response from API service\n`;
         }
-        // statuses = Object.keys(this.defn.paths[params.url][params.verb].responses).sort();
 
         ret += 'alt ';
         for (let S of statuses) {
