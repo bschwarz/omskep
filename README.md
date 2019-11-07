@@ -73,6 +73,7 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
   ![getPets Diagram](getPets.png)
   
 
-* Node.js
-* JavaScript (Browser)
+## Node.js
+
+## JavaScript (Browser)
 
