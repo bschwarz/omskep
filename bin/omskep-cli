@@ -16,7 +16,8 @@ let data = '';
 function handleCli(cargs, data = '') {
 
     let args = [];
-    let opts = [];
+    let opts = {};
+    let ret = '';
 
     //
     // Valid cli args use cases
@@ -31,16 +32,13 @@ function handleCli(cargs, data = '') {
                 console.error(usage);
                 process.exit(1);
             }
-            opts.push({key: cargs[index], value: cargs[index+1]});
+            opts[cargs[index].substr(1)] = cargs[index+1];
             index++;
         } else {
             args.push(cargs[index]);
         }
     }
     console.dir(opts);
-    console.dir(args);
-
-
 
     //
     // Assume if no data, then a filename was given on cli instead of pipe
@@ -52,10 +50,17 @@ function handleCli(cargs, data = '') {
         }
         data = fs.readFileSync(args[1], 'utf8');
     }
-    let type = args[0];
-    switch(type) {
+    
+    switch(args[0]) {
         case 'sequence':
+            
             console.log('SEQ');
+            if (!opts['path'] || !opts['verb']) {
+                console.error('Error: Sequence diagrams need the -path and -verb options specified.');
+                process.exit(1);
+            }
+            const d = new Puml(data);
+            ret = d.sequence(opts);
             break;
         case 'class':
             console.log('CLASS');
@@ -68,10 +73,11 @@ function handleCli(cargs, data = '') {
             break;   
     } 
     // console.log('DATA :' + data);
-    console.log('TYPE :' + type);
-    let d = new Puml(data);
-    console.log(d.getPaths());
-    console.log(d.getAllHttpMethods());
+    // let d = new Puml(data);
+    // console.log(d.getPaths());
+    // console.log(d.getAllHttpMethods());
+
+    return ret;
 }
 //
 // Note: there might be cases when the TTY check might not really work, if it is run
@@ -94,11 +100,11 @@ if (process.argv.length < 3) {
         }
     });
     process.stdin.on('end', function() {
-        handleCli(process.argv, data);
+        console.log(handleCli(process.argv, data));
     });
 } else {
     // data = fs.readFileSync(process.argv[3], 'utf8');
-    handleCli(process.argv);
+    console.log(handleCli(process.argv));
 }
 
 // const plantumlEncoder = require('plantuml-encoder');
