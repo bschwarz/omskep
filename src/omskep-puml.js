@@ -10,9 +10,9 @@ class Puml extends Diagram {
     constructor(defn) {
         super(defn);
         this.configs = {mindmap: '', wbs: '', class: '', global: ''};
-        this.configfile = '';
+        this._configfile = '';
         this._newStyle = false;
-        this._showTitle = true;
+        this._showTitle = false;
         this._showLegend = false;
         this.value = '';
     }
@@ -20,14 +20,14 @@ class Puml extends Diagram {
     * Getter that gets the config file (!include file)
     */
     get configFile() {
-        return this.configfile;
+        return this._configfile;
     }
 
     /**
     * Setter that sets the config file (!include file)
     */
     set configFile(file) {
-        this.configfile = file;
+        this._configfile = file;
     }
 
     /**
@@ -61,7 +61,7 @@ class Puml extends Diagram {
     * Getter that gets the boolean value for showLegend
     */
     get showLegend() {
-        return this._showTitle;
+        return this._showLegend;
     }
 
     /**
@@ -71,18 +71,18 @@ class Puml extends Diagram {
     set showLegend(value) {
         this._showLegend = value;
     }
-    /**
-    * Getter that returns the colors associated with the HTTP methods (verbs) 
-    */
-    static get httpMethodColors() {
-        return Diagram.httpMethodColors.map(x => `!${x.heading} = "<color ${x.color}>${x.heading}</color>"`).join('\n');
-    }
-    /**
-    * Getter that returns the puml functions for success, warning and failure cases
-    */
-    static get statusFunctions() {
-            return `!if %not(%function_exists("$success"))\n!function $success($msg)\n<font color=green><b>$msg\n!endfunction\n!endif\n!if %not(%function_exists("$failure"))\n!function $failure($msg)\n<font color=red><b>$msg\n!endfunction\n!endif\n!if %not(%function_exists("$warning"))\n!function $warning($msg)\n<font color=orange><b>$msg\n!endfunction\n!endif`;
-    }
+    // /**
+    // * Getter that returns the colors associated with the HTTP methods (verbs) 
+    // */
+    // static get httpMethodColors() {
+    //     return Diagram.httpMethodColors.map(x => `!${x.heading} = "<color ${x.color}>${x.heading}</color>"`).join('\n');
+    // }
+    // /**
+    // * Getter that returns the puml functions for success, warning and failure cases
+    // */
+    // static get statusFunctions() {
+    //         return `!if %not(%function_exists("$success"))\n!function $success($msg)\n<font color=green><b>$msg\n!endfunction\n!endif\n!if %not(%function_exists("$failure"))\n!function $failure($msg)\n<font color=red><b>$msg\n!endfunction\n!endif\n!if %not(%function_exists("$warning"))\n!function $warning($msg)\n<font color=orange><b>$msg\n!endfunction\n!endif`;
+    // }
 
     /**
     * returns the puml correct success/warning/failure depending on the status code
@@ -90,10 +90,6 @@ class Puml extends Diagram {
     */
     getStatusFunction(status) {
         return status.charAt(0) === '2' ? '$success('+status+')' : (status.charAt(0) === '3' ? '$warning('+status+')' : '$failure('+status+')');
-    }
-
-    print() {
-        console.log(this.defn);
     }
 
 
@@ -292,11 +288,11 @@ class Puml extends Diagram {
 
    /**
     * This generates sequence markdown for a sequence diagram for an operation
-    * @param {object} params - an object that contains the names of the elements in the sequence diagram {verb: '', url: '', client: '', gw: '', backend: '', automumber: false}
+    * @param {object} params - an object that contains the names of the elements in the sequence diagram {verb: '', url: '', client: '', gw: '', server: '', automumber: false}
     */
     sequence(params) {
         let ret = '@startuml\n';
-        let statuses = this.getStatusCodes(params.url, params.verb);
+        let statuses = this.getStatusCodes(params.path, params.verb);
         
 
         if (this.configFile != '') {
@@ -306,8 +302,9 @@ class Puml extends Diagram {
         ret += Puml.statusFunctions + '\n';
         ret += this.skinparam('global');
         ret += this.skinparam('sequence');
-        ret += '\nlegend\n';
+        
         if (this.showLegend) {
+            ret += '\nlegend\n';
             let sum = this.defn.paths[params.url][params.verb].summary || '';
             if (sum) {
                 ret += `<b>${sum}\n\n`;
@@ -317,35 +314,35 @@ class Puml extends Diagram {
             ret += '\nendlegend\n\n'
         }
         if (this.showTitle) {
-            // let opId = this.defn.paths[params.url][params.verb]['operationId'] || 
-            // ret += `title ${this.defn.info.title} ${this.defn.info.version}\n\n`;
             ret += 'title ' + this.getOperationId(params.url, params.verb) + '\n\n';
         }
 
-        params.verb = (!params.verb) ? 'GET' : params.verb;
+        // params.verb = (!params.verb) ? 'get' : params.verb;
         params.client = (!params.client) ? 'Client' : params.client;
         params.gw = (!params.gw) ? 'API Gateway' : params.gw;
-        params.autonumber = (!params.autonumber) ? 'API Gateway' : params.gw;
+        // params.autonumber = (!params.autonumber) ? false : params.gw;
 
         ret += `participant "${params.client}" as C\n`;
         ret += `participant "${params.gw}" as G\n`;
         
-        if (params.backend) {
-            ret += `participant "${params.backend}" as B\n`;
+        if (params.server) {
+            params.server = params.server.replace('%apiname%', this.defn.info.title);
+            params.server= params.server.replace('%version%', this.defn.info.version);
+            ret += `participant "${params.server}" as B\n`;
         }
 
-        ret += `C->G: ${params.verb.toUpperCase()} ${params.url}\n`;
+        ret += `C->G: ${params.verb.toUpperCase()} ${params.path}\n`;
         ret += 'activate G\n';
-        if (params.backend) {
-            ret += `G->B: request to ${params.backend}\n`;
-            ret += `B-->G: response from ${params.backend}\n`;
+        if (params.server) {
+            ret += `G->B: request to API service\n`;
+            ret += `B-->G: response from API service\n`;
         }
         // statuses = Object.keys(this.defn.paths[params.url][params.verb].responses).sort();
 
         ret += 'alt ';
         for (let S of statuses) {
             // ret += this.defn.paths[params.url][params.verb].responses[S].description || (S.charAt(0) === '2' ? 'Successful Request' : 'UnSuccessful Request');
-            ret += this.defn.paths[params.url][params.verb].responses[S].description + '\n';
+            ret += this.defn.paths[params.path][params.verb].responses[S].description + '\n';
             ret += 'G-->C: HTTP ';
             ret += this.getStatusFunction(S);
             ret += '\nelse ';
@@ -437,6 +434,16 @@ class Puml extends Diagram {
     }
     
 }
+
+/**
+* Holds the colors associated with the HTTP methods (verbs) 
+*/
+Puml.httpMethodColors = Diagram.httpMethodColors.map(x => `!${x.heading} = "<color ${x.color}>${x.heading}</color>"`).join('\n');
+
+/**
+* Holds all of the puml functions for success, warning and failure cases
+*/
+Puml.statusFunctions = `!if %not(%function_exists("$success"))\n!function $success($msg)\n<font color=green><b>$msg\n!endfunction\n!endif\n!if %not(%function_exists("$failure"))\n!function $failure($msg)\n<font color=red><b>$msg\n!endfunction\n!endif\n!if %not(%function_exists("$warning"))\n!function $warning($msg)\n<font color=orange><b>$msg\n!endfunction\n!endif`;
 
 
 module.exports = {
