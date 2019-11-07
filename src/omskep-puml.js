@@ -20,14 +20,14 @@ class Puml extends Diagram {
     /**
     * Getter that gets the config file (!include file)
     */
-    get configFile() {
+    get theme() {
         return this._configfile;
     }
 
     /**
     * Setter that sets the config file (!include file)
     */
-    set configFile(file) {
+    set theme(file) {
         this._configfile = file;
     }
 
@@ -125,6 +125,22 @@ class Puml extends Diagram {
         
         return this.substVariables(ret, opid);
     }
+   /**
+    * Determines the theme to use
+    */
+    getTheme() {
+        let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 'superhero-outline'];
+        let ret = '!include ';
+        if (!this.theme) return '';
+
+        if (pumlthemes.includes(this.theme)) {
+            ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this.theme}/puml-theme-${this.theme}.puml`;
+        } else {
+            ret += this.theme;
+        }
+        
+        return ret;
+    }
 
     /**
     * Generates the mindmap markdown, include start/end tags and any configs
@@ -137,8 +153,8 @@ class Puml extends Diagram {
 
         indent = versionSeparate ? 3 : 2;
 
-        if (this.configFile != '') {
-            ret += '!include ' + this.configFile + '\n';
+        if (this.theme != '') {
+            ret += '!include ' + this.theme + '\n';
         }
         ret += Puml.httpMethodColors + '\n';
         ret += this.skinparam('global');
@@ -171,8 +187,8 @@ class Puml extends Diagram {
 
         indent = versionSeparate ? 3 : 2;
 
-        if (this.configFile != '') {
-            ret += '!include ' + this.configFile + '\n';
+        if (this.theme != '') {
+            ret += '!include ' + this.theme + '\n';
         }
         ret += this.skinparam('global');
         ret += this.skinparam('wbs');
@@ -198,8 +214,8 @@ class Puml extends Diagram {
     class() {
         let classData = this.classItems();
         let ret = '@startuml' + '\n';
-        if (this.configFile != '') {
-            ret += '!include ' + this.configFile + '\n';
+        if (this.theme != '') {
+            ret += '!include ' + this.theme + '\n';
         }
         ret += Puml.httpMethodColors + '\n';
         ret += 'hide empty members\n';
@@ -304,9 +320,10 @@ class Puml extends Diagram {
         let opid = this.getOperationId(params.path, params.verb);
         
 
-        if (this.configFile != '') {
-            ret += '!include ' + this.configFile + '\n';
-        }
+        // if (this.theme != '') {
+        //     ret += '!include ' + this.theme + '\n';
+        // }
+        ret += this.getTheme() +'\n\n';
         ret += Puml.httpMethodColors + '\n';
         ret += Puml.statusFunctions + '\n';
         ret += this.skinparam('global');

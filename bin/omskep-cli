@@ -40,6 +40,9 @@ function handleCli(data = '') {
             if (opts['title'] != null) {
                 d.title = opts['title'];
             }
+            if (opts['theme'] != null) {
+                d.theme = opts['theme'];
+            }
             ret = d.sequence(opts);
             break;
         case 'class':
