@@ -72,6 +72,14 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
   #### Output
   ![getPets Diagram](getPets.png)
   
+  ##### with theme
+  ~~~
+  omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets.png
+  ~~~
+  
+  #### Output
+  ![getPets Cerulean Diagram](getPets-cerulean.png)
+  
 
 ## Node.js
 
