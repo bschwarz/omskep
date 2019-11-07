@@ -68,6 +68,10 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
   ~~~
   omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
   ~~~
+  
+  #### Output
+  ![getPets Diagram](getPets.png)
+  
 
 * Node.js
 * JavaScript (Browser)
