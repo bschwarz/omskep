@@ -37,7 +37,7 @@ function handleCli(data = '') {
                 process.exit(1);
             }
             const d = new Puml(data);
-            if (opts['title']) {
+            if (opts['title'] != null) {
                 d.title = opts['title'];
             }
             ret = d.sequence(opts);
@@ -87,6 +87,9 @@ for (let index = 2; index < process.argv.length; index++) {
         args.push(process.argv[index]);
     }
 }
+
+// console.dir(args);
+// console.log(opts);
 
 //
 // Figure out if the CLI is called correctly, and if a file is supplied or piped to command
