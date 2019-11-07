@@ -10,35 +10,14 @@ let data = '';
 
 /**
 * processes args and data to determine the output
-* @param {array} cargs - cli args
 * @param {string} data - data of the input file or from pipe
 */
-function handleCli(cargs, data = '') {
+function handleCli(data = '') {
 
-    let args = [];
-    let opts = {};
     let ret = '';
 
-    //
-    // Valid cli args use cases
-    //   omskep sequence filename
-    //   omskep sequence -option1 val1 -option2 val2... filename
-    //   cat filename | omskep sequence
-    //   cat filename | omskep sequence -option1 val1 -option2 val2...
-    //
-    for (let index = 2; index < cargs.length; index++) {
-        if (cargs[index].charAt(0) === '-') {
-            if ((cargs[index+1]) && (cargs[index+1].charAt(0) === '-')) {
-                console.error(usage);
-                process.exit(1);
-            }
-            opts[cargs[index].substr(1)] = cargs[index+1];
-            index++;
-        } else {
-            args.push(cargs[index]);
-        }
-    }
-    console.dir(opts);
+    // console.dir(opts);
+    // console.dir(args);
 
     //
     // Assume if no data, then a filename was given on cli instead of pipe
@@ -85,13 +64,39 @@ function handleCli(cargs, data = '') {
 // in that case the 3rd branch will be active, but not correct. Need to perhaps put 
 // a timeout on that
 //
-if (process.argv.length < 3) {
+let args = [];
+let opts = {};
+
+//
+// Valid cli args use cases
+//   omskep sequence filename
+//   omskep sequence -option1 val1 -option2 val2... filename
+//   cat filename | omskep sequence
+//   cat filename | omskep sequence -option1 val1 -option2 val2...
+//
+for (let index = 2; index < process.argv.length; index++) {
+    if (process.argv[index].charAt(0) === '-') {
+        if ((process.argv[index+1]) && (process.argv[index+1].charAt(0) === '-')) {
+            console.error(usage);
+            process.exit(1);
+        }
+        opts[process.argv[index].substr(1)] = process.argv[index+1];
+        index++;
+    } else {
+        args.push(process.argv[index]);
+    }
+}
+
+//
+// Figure out if the CLI is called correctly, and if a file is supplied or piped to command
+//
+if (args.length < 1) {
     console.log(usage);
     process.exit(1);
-} else if ((process.argv.length < 4) & (process.stdin.isTTY))  {
+} else if ((args.length < 2) && (process.stdin.isTTY))  {
     console.log(usage);
     process.exit(1);
-} else if (process.argv.length < 4)  {
+} else if (args.length < 2)  {
     process.stdin.setEncoding('utf8');
     process.stdin.on('readable', function() {
         let chunk;
@@ -100,11 +105,12 @@ if (process.argv.length < 3) {
         }
     });
     process.stdin.on('end', function() {
-        console.log(handleCli(process.argv, data));
+        console.log(handleCli(data));
     });
 } else {
     // data = fs.readFileSync(process.argv[3], 'utf8');
-    console.log(handleCli(process.argv));
+    console.log('FILE');
+    console.log(handleCli(''));
 }
 
 // const plantumlEncoder = require('plantuml-encoder');
