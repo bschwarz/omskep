@@ -8,7 +8,7 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
   
   #### CLI Usage
   ~~~
-  omskep <diagram type> [options] filename
+  omskep-cli <diagram type> [options] <filename>
   ~~~
 
   #### Basic invocation
