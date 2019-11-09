@@ -75,7 +75,11 @@ end
 Second and third line are shown with a the ``-theme`` option to give a different theme from the default one (see [puml-themes](https://bschwarz.github.io/puml-themes/)).
 ~~~
 omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
+~~~
+~~~
 omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
+~~~
+~~~
 omskep-cli sequence -path /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
 ~~~
 
@@ -83,7 +87,11 @@ omskep-cli sequence -path /pets -verb get -theme superhero petstore.json | java 
 Use the ``-pumlurl`` option to generate the url to fetch the image from the plantuml server, using either ``wget`` or ``curl``
 ~~~
 wget $(omskep-cli sequence -path /pets -verb get -pumlurl png petstore.json) -O getPets.png
+~~~
+~~~
 curl --url $(omskep-cli sequence -path /pets -verb get -theme cerulean -pumlurl png petstore.json) > getPets.png
+~~~
+~~~
 omskep-cli sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.json | xargs curl > getPets.svg
 ~~~
 
