@@ -11,8 +11,9 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
 
 
 ## Command line (CLI)
+<hr/>
   
-#### CLI Usage
+#### Syntax
 ~~~
 omskep-cli <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]
 
@@ -87,6 +88,8 @@ omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -
 
 
 ## Node.js
+<hr/>
 
 ## JavaScript (Browser)
+<hr/>
 
