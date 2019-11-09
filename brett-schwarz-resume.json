@@ -1,0 +1,384 @@
+{
+  "basics": {
+    "name": "Brett Schwarz",
+    "label": "Principal Engineer - Network and Software Engineering",
+    "summary": "Principal engineer with in-depth understanding of mobile and IT network architectures. Possess significant experience with product, service, and software life cycles, and customer engagement. Effective at adapting to different environments, concepts and technologies.",
+    "email": "brett.schwarz@gmail.com",
+    "phone": "+1-425-466-1731",
+    "website": "bschwarz.github.io",
+    "location": {
+      "address": "",
+      "city": "Bellevue",
+      "region": "Washington",
+      "postalCode": "98006",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "linkedin",
+        "username": "brettschwarz",
+        "url": "https://www.linkedin.com/in/brettschwarz"
+      }
+    ]
+  },
+  "work": [
+    {
+      "company": "AT&T",
+      "summary": "",
+      "position": "Principal System Engineer",
+      "startDate": "2018-01-01",
+      "highlights": [
+        "Architected, developed, and productized an internal web application to automate and expedite REST API design, maintenance, and delivery.",
+        "Maintained responsibilities held under the Principal Technical Architect title."
+      ]
+    },
+    {
+      "company": "AT&T",
+      "summary": "",
+      "position": "Principal Technical Architect",
+      "startDate": "2015-06-01",
+      "endDate": "2018-01-01",
+      "highlights": [
+        "Established best practices for REST web services across AT&T as a member of the internal standards team.",
+        "Oversaw and improved API design, security, and privacy for externally exposed REST/SOAP APIs as a member of the API governance team.",
+        "Advanced the adoption of OpenAPI (Swagger) across the company by developing tools and educating internal teams.",
+        "Consulted and mentored internal teams (specifically microservices) on API design to optimize the solution based on project goals and existing network architecture.",
+        "Accelerated REST adoption by authoring numerous articles on REST concepts/design and collaborating on a company-wide training program."
+      ]
+    },
+    {
+      "company": "Sentaca",
+      "summary": "",
+      "position": "Solutions Architect",
+      "startDate": "2011-06-01",
+      "endDate": "2015-05-01",
+      "highlights": [
+        "Ensured optimal solution by collaborating with customers and internal teams on technical and business requirements.",
+        "Collaborated on the architecture of end to end solutions for the service exposure layer of enterprise and consumer services.",
+        "Promoted API solutions at conferences and hack-a-thons by educating and demonstrating to customers the solution’s capabilities.",
+        "Deployed and tested API solutions with high availability, scalability, and low latency design criteria into the Amazon AWS EC2 and AT&T AIC cloud.",
+        "Designed a new documentation system improving workflow and quality"
+      ]
+    },
+    {
+      "company": "AT&T",
+      "summary": "",
+      "position": "Senior Test Engineer",
+      "startDate": "2010-10-01",
+      "endDate": "2011-06-01",
+      "highlights": [
+        "Headed the performance testing efforts for the messaging platform, including authoring test cases, test case execution, and managing defects.",
+        "Mentored team members on mobile and IT networks, by holding periodic workshops and consulting on projects.",
+        "Developed software tools for automation and troubleshooting."
+      ]
+    },
+    {
+      "company": "T-Mobile",
+      "summary": "",
+      "position": "Senior Engineer",
+      "startDate": "2010-05-01",
+      "endDate": "2010-10-01",
+      "highlights": [
+        "Designed and engineered subscriber-based mobile network elements.",
+        "Authored requirements, MOPs, and process documentation.",
+        "Successfully lead the engineering team on a complex subscriber and partner migration to a new platform.",
+        "Developed tools to streamline the implementation and troubleshooting."
+      ]
+    },
+    {
+      "company": "Alcatel-Lucent",
+      "summary": "",
+      "position": "Technical Sales Engineer",
+      "startDate": "2008-08-01",
+      "endDate": "2009-09-01",
+      "highlights": [
+        "Supported sales team with technical expertise for product presentations and consultations to the customer up to the VP level.",
+        "Achieved highest-ranked sales engineer status by assisting the sales team to secure a major strategic win."
+      ]
+    },
+    {
+      "company": "Alcatel-Lucent",
+      "summary": "",
+      "position": "Senior Network Systems Engineer",
+      "startDate": "2005-11-01",
+      "endDate": "2008-08-01",
+      "highlights": [
+        "Headed the performance optimization customer team from an engineering and project management role.",
+        "Accelerated customer’s understanding of the products by providing presentations and weekly performance updates to the customer up to the VP level, on the core network (GSM, UMTS).",
+        "Reduced turnaround time and increased effectiveness of statistics reporting by developing an internal web-based reporting tool.",
+        "Collaborated with development and system engineering on performance issues to improve the product’s performance."
+      ]
+    },
+    {
+      "company": "HMS Software",
+      "summary": "",
+      "position": "Implementation Engineer",
+      "startDate": "2005-01-01",
+      "endDate": "2005-11-01",
+      "highlights": [
+        "Translated requirements from the customer into customized code that implemented new features into our standard software product (manufacturing ERP).",
+        "Performed testing, managed all bug fixes and collaborated with the customer on the integration of the solution.",
+        "Increased productivity by mentoring other engineers in the Tcl programming language.",
+        "Optimized legacy code by conforming code to new features."
+      ]
+    },
+    {
+      "company": "ATT Wireless",
+      "summary": "",
+      "position": "Senior Engineer",
+      "startDate": "2003-04-01",
+      "endDate": "2004-12-01",
+      "highlights": [
+        "Engineered messaging platforms (e.g. SMSCs) within the company's mobile network.",
+        "Worked with the vendor to find the optimal solution and verification of the solution.",
+        "Reduced response time and improved quality by developing several software tools."
+      ]
+    },
+    {
+      "company": "PacketVideo Corporation",
+      "summary": "",
+      "position": "Lead Network Engineer",
+      "startDate": "2000-06-01",
+      "endDate": "2002-04-01",
+      "highlights": [
+        "Designed, tested and integrated our server (Linux) platform installation and architecture.",
+        "Lead first complete integration effort of our product line into the customer\u2019s network (JSP and servlets on Apache/Tomcat).",
+        "Significantly reduced cycle time and improved quality by developing a customized RedHat Linux Kickstart installation.",
+        "Improved internal communication by developing a web application for installation activities.",
+        "Provided pre and post-sales support, including presentations for the customers."
+      ]
+    },
+    {
+      "company": "Motorola",
+      "summary": "",
+      "position": "Lead Systems Engineer",
+      "startDate": "1996-10-01",
+      "endDate": "2000-06-01",
+      "highlights": [
+        "Design, tested and integrated products into the customer\u2019s mobile network.",
+        "Lead several major network changeouts for the engineering team.",
+        "Enhanced subscriber accessibility by developing procedure and software tools to migrate/modify subscribers efficiently and in a significantly reduced time frame."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Toledo",
+      "area": "Electrical Engineering",
+      "studyType": "Bachelor of Science",
+      "startDate": "1988-09-01",
+      "endDate": "1991-12-01"
+    },
+    {
+      "institution": "University of Toledo",
+      "area": "Mathematics",
+      "studyType": "Bachelor of Science",
+      "startDate": "1988-09-01",
+      "endDate": "1991-12-01"
+    },
+    {
+      "institution": "Udacity",
+      "area": "Frontend Web Developer",
+      "studyType": "Nanodegree",
+      "startDate": "2017-01-01",
+      "endDate": "2018-01-01"
+    },
+    {
+      "institution": "SBA",
+      "area": "Sustainability Studies",
+      "startDate": "2010-01-01",
+      "endDate": "2010-01-01"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Asterisk Open-Source PBX System",
+      "publisher": "Linux Journal",
+      "website": "http://www.linuxjournal.com/article/6769",
+      "summary": "Use one system to manage voice over IP and conventional phone lines, manage voice mail and run CGI-like applications for phone users.",
+      "releaseDate": "2004-02-01"
+    },
+    {
+      "name": "Hacking Red Hat Kickstart",
+      "publisher": "Linux Journal",
+      "website": "http://www.linuxjournal.com/article/6473",
+      "summary": "How to create a single CD for fast and easy customized installation.",
+      "releaseDate": "2003-04-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Integration",
+      "level": "5",
+      "keywords": ["Mobile Networks", "IT Networks"]
+    },
+    {
+      "name": "Wireless",
+      "level": "5",
+      "keywords": [
+        "2G",
+        "3G",
+        "4G",
+        "LTE",
+        "GSM",
+        "CDMA",
+        "UMTS",
+        "SMSC",
+        "HLR",
+        "HSS"
+      ]
+    },
+    {
+      "name": "Testing",
+      "level": "3",
+      "keywords": ["performance", "functional", "unit", "UAT"]
+    },
+    {
+      "name": "Software Development",
+      "level": "4",
+      "keywords": [
+        "Tcl/Tk",
+        "Node.js",
+        "C",
+        "Python",
+        "Java",
+        "shell",
+        "Git",
+        "GitHub",
+        "CVS",
+        "SVN",
+        "Bitbucket",
+        "Agile",
+        "DevSecOps",
+        "Jenkins",
+        "Travis CI"
+      ]
+    },
+    {
+      "name": "Web Services",
+      "level": "5",
+      "keywords": [
+        "REST",
+        "OpenAPI (Swagger)",
+        "OAuth 2.0",
+        "JSON Schema",
+        "HTTP/1.1",
+        "HTTP/2",
+        "WebSockets",
+        "SOAP",
+        "WSDL",
+        "XML",
+        "GraphQL",
+        "RAML"
+      ]
+    },
+    {
+      "name": "Network Architecture",
+      "level": "5",
+      "keywords": [
+        "Mobile Networks",
+        "IT Networks",
+        "TCP/IP",
+        "OSI",
+        "AWS IAM",
+        "AWS Lambda",
+        "AWS EC2",
+        "AWS S3"
+      ]
+    },
+    {
+      "name": "Computers",
+      "level": "4",
+      "keywords": ["Linux/Unix", "Windows", "Mac", "MS Office"]
+    },
+    {
+      "name": "Web Development",
+      "level": "4",
+      "keywords": [
+        "HTML5",
+        "CSS",
+        "JavaScript",
+        "jQuery",
+        "Gulp",
+        "Grunt",
+        "Knockout.js",
+        "AngularJS",
+        "Bootstrap",
+        "Foundation",
+        "Apache",
+        "Naviserver",
+        "Tomcat"
+      ]
+    },
+    {
+      "name": "Datastores",
+      "level": "4",
+      "keywords": [
+        "PostgreSQL",
+        "SQLite",
+        "MySQL",
+        "Oracle",
+        "MongoDB",
+        "DynamoDB",
+        "Redis",
+        "Memcached"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native or bilingual proficiency"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Professional"
+    },
+    {
+      "language": "German",
+      "fluency": "Limited working"
+    },
+    {
+      "language": "Mandarin",
+      "fluency": "Elementary"
+    }
+  ],
+  "references": [
+    {
+      "name": "Bryon Donahue (Lead-Technical Architect at AT&T)",
+      "reference": "I worked with Brett for several years. He was a contributor to AT&T\u2019s API platform and standards. Furthermore, we\u2019d often consult with one another when confronted with difficult API problems. \n\nBrett is an API expert. He\u2019s worked on a large number of API projects that span wide variety of domains. Few people have the breadth and depth of API experience as Brett.\n\nBeyond, his technical skills, Brett is the kind of person that people look to as a leader due to his strong oral and written communication skills and his natural ability to empathize with others. Moreover, you can count on Brett to deliver on his commitments."
+    },
+    {
+      "name": "Tish St. Germain (Product leadership throughout lifecycle. Integrator of software & hardware development using Scaled Agile methodology.)",
+      "reference": "I\u2019ve had the pleasure of managing Brett Schwarz for the past 3 years.  Brett is passionate about good, clean, simple API Design and adherence to standards.  He regularly demonstrates his mastery of technical tools and methodologies when providing recommendations to both project and tool enhancement initiatives.  He is recognized as the lead subject matter expert at AT&T on the REST protocol, responsible for approving all new API designs, writing technical blogs, as well as creating training and development tools.  Brett understands that technology changes fast and he works hard to keep his skillset up to date.  Brett would be a significant asset to any team looking to leverage or deploy API\u2019s in their architectural designs."
+    },
+    {
+      "name": "Karthic Raghavan (Principal Technical Architect at AT&T Services Inc)",
+      "reference": "I have worked with Brett for the past 7-8 years, and he has always gone above and beyond what he was asked to do. He always strives to improve products, services, and processes. He has great attention to detail and does the job the right way. He is very personable and a pleasure to work with.\n\nI have come across many people who claim themselves to be an expert in REST API Design and Architecture but many of them are not even close to be an expert in it. But I can say with utmost confidence that BRETT is an TRUE expert in REST API Design and Architecture and a GURU in it. I have not come across anybody who is better than him in it in the industry till now. He is an pioneer in it working alongside with me as a co-lead in the North Bound REST API architecture for an REST API based gateway."
+    },
+    {
+      "name": "Dale Western (Systems Architect at AT&T)",
+      "reference": "It has been a pleasure working with Brett for many reasons.\n\nHe is a knowledgeable developer, very experienced in API design, documentation, construction and testing.  Brett has provided consultation to numerous teams at AT&T in all these areas.  Brett is very approachable, friendly and helpful.  You can count on Brett to deliver on his commitments.\n\nBrett grasps the latest trends and technologies in the field, pursuing them of his out initiative.  He has shared his knowledge and taught others the best practices he has acquired.\n\nI have thoroughly enjoyed the 5+ years I worked with Brett and would work with him again if the opportunity presented itself."
+    },
+    {
+      "name": "Ed Lambert (Director, New Product Development Engineering - AT&T Research Labs)",
+      "reference": "Brett worked on my team for many years, and was a key leader in pushing forward good API design.  Brett has outstanding skills as both a coder and an architect that can understand business use cases, data models, and how to design highly reusable APIs.  On top of that, however, Brett did incredible work on his own initiative to build tooling sets to make API creation faster and easier for other developers.  \n\nBrett is a truly outstanding senior technologist and I consider myself fortunate to have worked with him."
+    },
+    {
+      "name": "Claudia (Gomez) Heidinger (Scrum Master (SAFe Agile) at AT&T)",
+      "reference": "I worked with Brett on the API Delivery team for almost 3 years. Whenever Brett engaged my team of software architects, the practice was innovative, results-oriented, and always drove toward improving the life our Developer customer base. Along with possessing strong technical knowledge, Brett is a great listener, able to locate solution by collaborating with others. I experienced effort Brett drove to automate how API specifications are created, along with a separate effort to automate the entry and requirements process for teams to submit request for their APIs to be reviewed and approved by a Governance Board. Both efforts saved many hours of administrative work and increased teams’ efficiency with an automated experience. Given the opportunity to collaborate with Brett again, I would jump at the chance! I am confident that Brett would be an amazing addition to any team. As a plus, Brett is a great guy with a great sense of humor!"
+    },
+    {
+      "name": "Rajender Saini (Partner Engineer (Pre/Post Sales) at The Climate Corporation)",
+      "reference": "I had the pleasure of working with Brett for more than 4 years at the AT&T. As an architect and technical lead Brett's have the ability to command a room and get people on board with ideas\u2014even people who were initially on completely different pages. As a team member or a leader, Brett earns my highest recommendation."
+    },
+    {
+      "name": "Anandprasanna Gaitonde (Solutions Architect at Amazon Web Services (AWS))",
+      "reference": "I worked with Brett as part of the API Developer Program at A&T, where he provide guidance and direction towards the API architecture and design for APIs. This greatly helped the team to create a user friendly and streamlined API interface for external partners. His work on developer experience with APIs and his relentless pursuit for driving towards an optimal design was seen in several projects. His contribution towards standardizing API best practices and design across the organization is truly commendable. He would be great asset to have on teams that are working on large scale solution architecture and design. I look forward to working with him again."
+    },
+    {
+      "name": "Sayee Gurumurthy (Enterprise Architect, Visionary and Entrepreneur)",
+      "reference": "I worked with Brett for more than 5 years and is a great enthusiastic & approachable leader. His mastery on API design and documentation, has been critical in launching many successfully APIs in marketplace. Along with his API design skills, he has been leading in building tools for API creation, specification creation and development. \n\nHe is avid leaner and is curios to learning new technology and build tools to support his concepts. He is a great enthusiastic technical leader, who can take a concept from initiation to completion stage.  Will be willing to work with him again as opportunity permits."
+    }
+  ]
+}
