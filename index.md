@@ -14,7 +14,8 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
   
 #### CLI Usage
 ~~~
-omskep-cli <diagram type> [options] <filename>
+omskep-cli <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]
+
 ~~~
 
 #### Basic invocation
@@ -82,7 +83,7 @@ omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar
 omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets.png
 ~~~
 
-![getPets Cerulean Diagram](getPets-cerulean.png)
+![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
 
 
 ## Node.js
