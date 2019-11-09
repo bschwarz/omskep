@@ -89,6 +89,7 @@ omskep-cli sequence -path /pets -verb get -theme superhero petstore.json | java 
 
 ### Getting image (remote plantuml server)
 If you don't have a local install of the ``plantuml.jar`` program, you can use the ``-pumlurl`` option to generate the url to send the markdown generated from ``omskep-cli`` to fetch the image from the plantuml server, using either ``wget`` or ``curl``
+
 **Note:** You will need to have the [plantuml-encoder](https://www.npmjs.com/package/plantuml-encoder) node package installed to use this option.
 
 Using ``wget`` with command substitution
