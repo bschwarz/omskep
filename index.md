@@ -72,30 +72,38 @@ end
 ~~~
 
 ### Getting image (local plantuml)
-Second and third line are shown with a the ``-theme`` option to give a different theme from the default one (see [puml-themes](https://bschwarz.github.io/puml-themes/)).
+Generate an image by piping it to a local plantuml.jar program.
 ~~~
 omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
 ~~~
+Using ``cerulean`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/)
 ~~~
 omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
 ~~~
+Using ``superhero`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/)
 ~~~
 omskep-cli sequence -path /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
 ~~~
 
+![getPets Diagram](getPets.png) ![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
+
 ### Getting image (remote plantuml server)
-Use the ``-pumlurl`` option to generate the url to fetch the image from the plantuml server, using either ``wget`` or ``curl``
+If you don't have a local install of the ``plantuml.jar`` program, you can use the ``-pumlurl`` option to generate the url to send the markdown generated from ``omskep-cli`` to fetch the image from the plantuml server, using either ``wget`` or ``curl``
+
+Using ``wget``
 ~~~
 wget $(omskep-cli sequence -path /pets -verb get -pumlurl png petstore.json) -O getPets.png
 ~~~
+Using ``curl`` with command substitution.
 ~~~
 curl --url $(omskep-cli sequence -path /pets -verb get -theme cerulean -pumlurl png petstore.json) > getPets.png
 ~~~
+Using ``curl`` with ``xargs``
 ~~~
 omskep-cli sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.json | xargs curl > getPets.svg
 ~~~
 
-![getPets Diagram](getPets.png) ![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
+
 
 
 ## Node.js
