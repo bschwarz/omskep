@@ -15,6 +15,12 @@ class Puml extends Diagram {
         this._title = null;
         this._showLegend = false;
         this.value = '';
+
+        if ((defn.openapi) || (defn.swagger)) {
+            this.input = 'openapi';
+        } else if (defn.basics && defn.skills) {
+            this.input = 'jsonresume';
+        }
     }
     
     /**
@@ -171,6 +177,63 @@ class Puml extends Diagram {
         
         ret += this.tree(true, indent) + '\n';
         ret += '@endmindmap';
+
+        this.value = ret;
+        return ret;
+    }
+
+    /**
+    * Generates the wbs diagram based on a json resume
+    * @param {string} type - either 'wbs' or 'mindmap'
+    */
+    resumesummary(type = 'wbs') {
+        let indent = 2;
+        let ret = '@startwbs' + '\n';
+        const star = "*";
+        let resume = this.defn;
+
+        if (this.theme != '') {
+            ret += '!include ' + this.theme + '\n';
+        }
+        this.skinparam('global', 'defaultTextAlignment center');
+        this.skinparam('wbs', 'LineColor #f0f0f0');
+        this.skinparam('wbs', 'BackgroundColor #f3f3f3');
+        this.skinparam('wbs', ':depth(0) {\nfontSize 16\nfontStyle bold\n}');
+        this.skinparam('wbs', ':depth(1) {\nfontSize 14\npadding 4\nfontStyle bold\n}');
+        this.skinparam('wbs', ':depth(2) {\nfontSize 12\npadding 2\n}');
+        this.skinparam('wbs', ':depth(3) {\nfontSize 10\npadding 1\n}');
+        ret += this.skinparam('global');
+        ret += this.skinparam('wbs');
+        
+        if (this.title) {
+            ret += `title ${resume.basics.name}\\n${resume.basics.label}\n`;
+        }
+
+        ret += star + ' ' + resume.basics.name + '\n';
+        ret += star.repeat(2) + ' Education' + '\n';
+        // EDUCATION
+        for (let E of resume.education) {
+            ret += star.repeat(3) + ' <b>' + E.area + '\\n' + E.studyType + '\\n' + E.institution + '\n';
+        }
+        // WORK
+        ret += star.repeat(2) + ' Work' + '\n';
+        for (let E of resume.work) {
+            ret += star.repeat(3) + ' <b>' + E.position + '\\n' + E.company +'\\n' + E.startDate + ' - ' + (E.endDate ? E.endDate : 'present') +'\n';
+        }
+        // SKILLS
+        ret += star.repeat(2) + ' Skills' + '\n';
+        for (let E of resume.skills) {
+            // ret += star.repeat(3) + ' <b>' + E.name + '\\n' + E.level +'\n';
+            ret += star.repeat(3) + ' <b>' + E.name +'\n';
+            let cnt = 0;
+            for (let K of E.keywords) {
+                ret += star.repeat(4) + ' ' + K +'\n';
+                // ret += star.repeat(4) + (cnt%2 ? '< ' : '> ') + K +'\n';
+                cnt++;
+            }
+        }
+
+        ret += '@endwbs';
 
         this.value = ret;
         return ret;
@@ -387,8 +450,9 @@ class Puml extends Diagram {
         if (value === '') {
             value = this.value;
         }
+        let pumlEncoder = require('plantuml-encoder');
 
-        this.value = `http://www.plantuml.com/plantuml/${imgfmt}/${plantumlEncoder.encode(value)}`;
+        this.value = `http://www.plantuml.com/plantuml/${imgfmt}/${pumlEncoder.encode(value)}`;
         return this.value;
     }
 

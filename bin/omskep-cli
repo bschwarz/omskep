@@ -3,6 +3,15 @@
 const puml = require('../src/omskep-puml.js')
 const fs = require('fs');
 const path = require('path');
+// Catch this cause it is optional
+let pumlEncoder = require('plantuml-encoder');
+try {
+    let pumlEncoder = require('plantuml-encoder');
+} catch(er) {
+    let pumlEncoder = null;
+}
+
+// console.log('PUML: ' + pumlEncoder);
 
 const usage = 'omskep-cli <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]';
 let Puml = puml.Puml;
@@ -15,6 +24,7 @@ let data = '';
 function handleCli(data = '') {
 
     let ret = '';
+    let diag = null;
 
     // console.dir(opts);
     // console.dir(args);
@@ -30,20 +40,28 @@ function handleCli(data = '') {
         data = fs.readFileSync(args[1], 'utf8');
     }
     
+    // special handling for -pumlurl, since it relies on plantuml-encoder package
+    if ((opts['pumlurl'] != null) && (opts['pumlurl'])) {
+        if (! pumlEncoder) {
+            console.error('Please install "plantuml-encoder" to use -pumlurl option');
+            process.exit(1);
+        }
+    }
+    
     switch(args[0]) {
         case 'sequence':
             if (!opts['path'] || !opts['verb']) {
                 console.error('Error: Sequence diagrams need the -path and -verb options specified.');
                 process.exit(1);
             }
-            const d = new Puml(data);
+            diag = new Puml(data);
             if (opts['title'] != null) {
-                d.title = opts['title'];
+                diag.title = opts['title'];
             }
             if (opts['theme'] != null) {
-                d.theme = opts['theme'];
+                diag.theme = opts['theme'];
             }
-            ret = d.sequence(opts);
+            ret = pumlEncoder ? d.pumlurl(opts['pumlurl'], diag.sequence(opts)) : diag.sequence(opts);
             break;
         case 'class':
             console.log('CLASS');
@@ -53,7 +71,12 @@ function handleCli(data = '') {
             break;
         case 'mindmap':
             console.log('MIND');
-            break;   
+            break;
+        case 'resumesummary':
+            diag = new Puml(data);
+            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
+            ret = diag.resumesummary();
+            break;
     } 
     // console.log('DATA :' + data);
     // let d = new Puml(data);
