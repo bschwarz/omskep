@@ -10,7 +10,7 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
 # Usage
 
 
-## Command line (CLI)
+### Command line (CLI)
 <hr/>
   
 #### Syntax
@@ -87,9 +87,9 @@ omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -
 ![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
 
 
-## Node.js
+### Node.js
 <hr/>
 
-## JavaScript (Browser)
+### JavaScript (Browser)
 <hr/>
 
