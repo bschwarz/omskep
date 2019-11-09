@@ -71,19 +71,14 @@ end
 
 ~~~
 
-#### Getting image (plantuml)
+#### Getting image (plantuml) - with basic and two themes (see [puml-themes](https://bschwarz.github.io/puml-themes/))
 ~~~
 omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
+omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets=cerulean.png
+omskep-cli sequence -path /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
 ~~~
 
-![getPets Diagram](getPets.png)
-
-#### Getting image with theme (plantuml)
-~~~
-omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets.png
-~~~
-
-![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
+![getPets Diagram](getPets.png) ![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
 
 
 ### Node.js
