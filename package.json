@@ -17,5 +17,8 @@
   "license": "ISC",
   "bin": {
     "omskep-cli": "./bin/omskep-cli"
+  },
+  "dependencies": {
+    "plantuml-encoder": "^1.4.0"
   }
 }
