@@ -4,7 +4,7 @@ const puml = require('../src/omskep-puml.js')
 const fs = require('fs');
 const path = require('path');
 
-const usage = 'omskep <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]';
+const usage = 'omskep-cli <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]';
 let Puml = puml.Puml;
 let data = '';
 
