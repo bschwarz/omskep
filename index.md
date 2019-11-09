@@ -4,11 +4,10 @@ title: home
 published: true
 ---
 
-# omskep
 Assists in the generatation of diagrams (png, svg, canvas, etc) based on standard file formats, such as Swagger, OpenAPI, AWS Cloud Formation Templates, Ansible Templates, by providing the text markdown for renderers to take advantage of.
 
-# Usage
-
+# How to Use It.
+Can be used either on the command line (CLI), Node.js or with JavaScript.
 
 ### Command line (CLI)
 <hr/>
