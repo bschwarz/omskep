@@ -3,6 +3,7 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
 
 # Usage
 
+See the [main web page](https://bschwarz.github.io/omskep/) for more help
 
 ## Command line (CLI)
   
