@@ -67,14 +67,22 @@ function handleCli(data = '') {
             console.log('CLASS');
             break;
         case 'wps':
+            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
             console.log('WPS');
             break;
         case 'mindmap':
+            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
             console.log('MIND');
             break;
         case 'resumesummary':
             diag = new Puml(data);
             diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
+            if (opts['title'] != null) {
+                diag.title = opts['title'];
+            }
+            if (opts['theme'] != null) {
+                diag.theme = opts['theme'];
+            }
             ret = diag.resumesummary();
             break;
     } 

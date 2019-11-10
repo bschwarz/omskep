@@ -117,7 +117,7 @@ class Puml extends Diagram {
     * Determines the title to use, if any
     * @param {string} opid - optional, operationId if diagram might have operationId in title
     */
-    getTitle(opid = '') {
+    getSeqTitle(opid = '') {
         let t1 = `title ${this.title}`;
         let t2 = `title ${this.defn.info.title} ${this.defn.info.version}`;
         let t3 = '';
@@ -187,27 +187,34 @@ class Puml extends Diagram {
     * @param {string} type - either 'wbs' or 'mindmap'
     */
     resumesummary(type = 'wbs') {
-        let indent = 2;
-        let ret = '@startwbs' + '\n';
-        const star = "*";
+        let ret = '@start' + type  + '\n';
+        let star = type === 'wbs' ? "*" : "-";
         let resume = this.defn;
+        let left = type === 'wbs' ? "<" : "";
+        let right = type === 'wbs' ? ">" : "";
+        let t1 = `title ${this.title}`;
+        let t2 = `title ${this.defn.basics.name}\\n${this.defn.basics.label}`;
+        let t3 = '';
 
         if (this.theme != '') {
             ret += '!include ' + this.theme + '\n';
         }
         this.skinparam('global', 'defaultTextAlignment center');
-        this.skinparam('wbs', 'LineColor #f0f0f0');
-        this.skinparam('wbs', 'BackgroundColor #f3f3f3');
-        this.skinparam('wbs', ':depth(0) {\nfontSize 16\nfontStyle bold\n}');
-        this.skinparam('wbs', ':depth(1) {\nfontSize 14\npadding 4\nfontStyle bold\n}');
-        this.skinparam('wbs', ':depth(2) {\nfontSize 12\npadding 2\n}');
-        this.skinparam('wbs', ':depth(3) {\nfontSize 10\npadding 1\n}');
+        this.skinparam('global', 'shadowing false');
+        this.skinparam('global', 'RoundCorner 10');
+        this.skinparam('global', 'TitleFontSize 18');
+        this.skinparam(type, 'LineColor #f0f0f0');
+        this.skinparam(type, 'BorderThickness 3');
+        this.skinparam(type, 'BackgroundColor #f6f6f6');
+        this.skinparam(type, 'FontColor #6a9fb5');
+        this.skinparam(type, ':depth(0) {\nfontSize 16\nfontStyle bold\n}');
+        this.skinparam(type, ':depth(1) {\nfontSize 14\npadding 5\nfontStyle bold\n}');
+        this.skinparam(type, ':depth(2) {\nfontSize 12\npadding 3\n}');
+        this.skinparam(type, ':depth(3) {\nfontSize 10\npadding 2\n}');
         ret += this.skinparam('global');
-        ret += this.skinparam('wbs');
+        ret += this.skinparam(type);
         
-        if (this.title) {
-            ret += `title ${resume.basics.name}\\n${resume.basics.label}\n`;
-        }
+        ret += this.title ?  t1 : (this.title === null ? t2 : t3) + '\n\n';
 
         ret += star + ' ' + resume.basics.name + '\n';
         ret += star.repeat(2) + ' Education' + '\n';
@@ -220,6 +227,7 @@ class Puml extends Diagram {
         for (let E of resume.work) {
             ret += star.repeat(3) + ' <b>' + E.position + '\\n' + E.company +'\\n' + E.startDate + ' - ' + (E.endDate ? E.endDate : 'present') +'\n';
         }
+        star = type === 'wbs' ? '*' : '+';
         // SKILLS
         ret += star.repeat(2) + ' Skills' + '\n';
         for (let E of resume.skills) {
@@ -227,13 +235,13 @@ class Puml extends Diagram {
             ret += star.repeat(3) + ' <b>' + E.name +'\n';
             let cnt = 0;
             for (let K of E.keywords) {
-                ret += star.repeat(4) + ' ' + K +'\n';
-                // ret += star.repeat(4) + (cnt%2 ? '< ' : '> ') + K +'\n';
+                // ret += star.repeat(4) + ' ' + K +'\n';
+                ret += star.repeat(4) + (cnt%2 ? left+' ' : right+' ') + K +'\n';
                 cnt++;
             }
         }
 
-        ret += '@endwbs';
+        ret += '@end'+type;
 
         this.value = ret;
         return ret;
@@ -402,7 +410,7 @@ class Puml extends Diagram {
             ret += statuses.sort().map(x => `| ${this.getStatusFunction(x)} | ${Diagram.statuscodes.find(y => y.code === x).reasonphrase} |`).join('\n');
             ret += '\nendlegend\n\n'
         }
-        ret += this.getTitle(opid) + '\n\n';
+        ret += this.getSeqTitle(opid) + '\n\n';
 
         params.client = (!params.client) ? 'Client' : params.client;
         params.gw = (!params.gw) ? 'API Gateway' : params.gw;
