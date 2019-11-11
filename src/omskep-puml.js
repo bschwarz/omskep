@@ -135,7 +135,7 @@ class Puml extends Diagram {
     * Determines the theme to use
     */
     getTheme() {
-        let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 'superhero-outline'];
+        let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 'superhero-outline', 'hacker', 'resume-light'];
         let ret = '!include ';
         if (!this.theme) return '';
 
@@ -196,27 +196,25 @@ class Puml extends Diagram {
         let t2 = `title ${this.defn.basics.name}\\n${this.defn.basics.label}`;
         let t3 = '';
 
-        if (this.theme != '') {
-            ret += '!include ' + this.theme + '\n';
-        }
-        this.skinparam('global', 'defaultTextAlignment center');
-        this.skinparam('global', 'shadowing false');
-        this.skinparam('global', 'RoundCorner 10');
-        this.skinparam('global', 'TitleFontSize 18');
-        this.skinparam(type, 'LineColor #f0f0f0');
-        this.skinparam(type, 'BorderThickness 3');
-        this.skinparam(type, 'BackgroundColor #f6f6f6');
-        this.skinparam(type, 'FontColor #6a9fb5');
-        this.skinparam(type, ':depth(0) {\nfontSize 16\nfontStyle bold\n}');
-        this.skinparam(type, ':depth(1) {\nfontSize 14\npadding 5\nfontStyle bold\n}');
-        this.skinparam(type, ':depth(2) {\nfontSize 12\npadding 3\n}');
-        this.skinparam(type, ':depth(3) {\nfontSize 10\npadding 2\n}');
+        ret += this.getTheme() +'\n\n';
+        // this.skinparam('global', 'defaultTextAlignment center');
+        // this.skinparam('global', 'shadowing false');
+        // this.skinparam('global', 'RoundCorner 10');
+        // this.skinparam('global', 'TitleFontSize 18');
+        // this.skinparam(type, 'LineColor #f0f0f0');
+        // this.skinparam(type, 'BorderThickness 3');
+        // this.skinparam(type, 'BackgroundColor #f9f9f9');
+        // this.skinparam(type, 'FontColor #6a9fb5');
+        // this.skinparam(type, ':depth(0) {\nfontSize 16\nfontStyle bold\n}');
+        // this.skinparam(type, ':depth(1) {\nfontSize 14\npadding 5\nfontStyle bold\n}');
+        // this.skinparam(type, ':depth(2) {\nfontSize 12\npadding 3\n}');
+        // this.skinparam(type, ':depth(3) {\nfontSize 10\npadding 2\n}');
         ret += this.skinparam('global');
         ret += this.skinparam(type);
         
         ret += this.title ?  t1 : (this.title === null ? t2 : t3) + '\n\n';
 
-        ret += star + ' ' + resume.basics.name + '\n';
+        ret += star + ' ' + resume.basics.name + '\\n' + resume.basics.label + '\n';
         ret += star.repeat(2) + ' Education' + '\n';
         // EDUCATION
         for (let E of resume.education) {
@@ -390,10 +388,6 @@ class Puml extends Diagram {
         let statuses = this.getStatusCodes(params.path, params.verb);
         let opid = this.getOperationId(params.path, params.verb);
         
-
-        // if (this.theme != '') {
-        //     ret += '!include ' + this.theme + '\n';
-        // }
         ret += this.getTheme() +'\n\n';
         ret += Puml.httpMethodColors + '\n';
         ret += Puml.statusFunctions + '\n';
