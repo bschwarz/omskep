@@ -197,18 +197,6 @@ class Puml extends Diagram {
         let t3 = '';
 
         ret += this.getTheme() +'\n\n';
-        // this.skinparam('global', 'defaultTextAlignment center');
-        // this.skinparam('global', 'shadowing false');
-        // this.skinparam('global', 'RoundCorner 10');
-        // this.skinparam('global', 'TitleFontSize 18');
-        // this.skinparam(type, 'LineColor #f0f0f0');
-        // this.skinparam(type, 'BorderThickness 3');
-        // this.skinparam(type, 'BackgroundColor #f9f9f9');
-        // this.skinparam(type, 'FontColor #6a9fb5');
-        // this.skinparam(type, ':depth(0) {\nfontSize 16\nfontStyle bold\n}');
-        // this.skinparam(type, ':depth(1) {\nfontSize 14\npadding 5\nfontStyle bold\n}');
-        // this.skinparam(type, ':depth(2) {\nfontSize 12\npadding 3\n}');
-        // this.skinparam(type, ':depth(3) {\nfontSize 10\npadding 2\n}');
         ret += this.skinparam('global');
         ret += this.skinparam(type);
         
@@ -228,9 +216,12 @@ class Puml extends Diagram {
         star = type === 'wbs' ? '*' : '+';
         // SKILLS
         ret += star.repeat(2) + ' Skills' + '\n';
+        let tcnt = 0;
         for (let E of resume.skills) {
             // ret += star.repeat(3) + ' <b>' + E.name + '\\n' + E.level +'\n';
-            ret += star.repeat(3) + ' <b>' + E.name +'\n';
+            // ret += star.repeat(3) + ' <b>' + E.name +'\n';
+            ret += star.repeat(3) + (tcnt%2 ? left+' <b>' : right+' <b>') + E.name +'\n';
+            tcnt++;
             let cnt = 0;
             for (let K of E.keywords) {
                 // ret += star.repeat(4) + ' ' + K +'\n';

@@ -5,11 +5,11 @@ const fs = require('fs');
 const path = require('path');
 // Catch this cause it is optional
 let pumlEncoder = require('plantuml-encoder');
-try {
-    let pumlEncoder = require('plantuml-encoder');
-} catch(er) {
-    let pumlEncoder = null;
-}
+// try {
+//     let pumlEncoder = require('plantuml-encoder');
+// } catch(er) {
+//     let pumlEncoder = null;
+// }
 
 // console.log('PUML: ' + pumlEncoder);
 
@@ -61,7 +61,7 @@ function handleCli(data = '') {
             if (opts['theme'] != null) {
                 diag.theme = opts['theme'];
             }
-            ret = pumlEncoder ? diag.pumlurl(opts['pumlurl'], diag.sequence(opts)) : diag.sequence(opts);
+            ret = opts['pumlurl'] ? diag.pumlurl(opts['pumlurl'], diag.sequence(opts)) : diag.sequence(opts);
             break;
         case 'class':
             console.log('CLASS');
@@ -84,7 +84,7 @@ function handleCli(data = '') {
                 diag.theme = opts['theme'];
             }
             // ret = diag.resumesummary();
-            ret = pumlEncoder ? diag.pumlurl(opts['pumlurl'], diag.resumesummary()) : diag.resumesummary();
+            ret = opts['pumlurl'] ? diag.pumlurl(opts['pumlurl'], diag.resumesummary()) : diag.resumesummary();
             break;
     } 
     // console.log('DATA :' + data);
