@@ -61,7 +61,7 @@ function handleCli(data = '') {
             if (opts['theme'] != null) {
                 diag.theme = opts['theme'];
             }
-            ret = pumlEncoder ? d.pumlurl(opts['pumlurl'], diag.sequence(opts)) : diag.sequence(opts);
+            ret = pumlEncoder ? diag.pumlurl(opts['pumlurl'], diag.sequence(opts)) : diag.sequence(opts);
             break;
         case 'class':
             console.log('CLASS');
@@ -83,7 +83,8 @@ function handleCli(data = '') {
             if (opts['theme'] != null) {
                 diag.theme = opts['theme'];
             }
-            ret = diag.resumesummary();
+            // ret = diag.resumesummary();
+            ret = pumlEncoder ? diag.pumlurl(opts['pumlurl'], diag.resumesummary()) : diag.resumesummary();
             break;
     } 
     // console.log('DATA :' + data);
