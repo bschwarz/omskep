@@ -94,15 +94,15 @@ If you don't have a local install of the ``plantuml.jar`` program, you can use t
 
 Using ``wget`` with command substitution
 ~~~
-wget $(omskep-cli sequence -path /pets -verb get -pumlurl png petstore.json) -O getPets.png
+wget $(omskep sequence -path /pets -verb get -pumlurl png petstore.json) -O getPets.png
 ~~~
 Using ``curl`` with command substitution.
 ~~~
-curl --url $(omskep-cli sequence -path /pets -verb get -theme cerulean -pumlurl png petstore.json) > getPets.png
+curl --url $(omskep sequence -path /pets -verb get -theme cerulean -pumlurl png petstore.json) > getPets.png
 ~~~
 Using ``curl`` with ``xargs``
 ~~~
-omskep-cli sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.json | xargs curl > getPets.svg
+omskep sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.json | xargs curl > getPets.svg
 ~~~
 
 
