@@ -10,13 +10,15 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
 Can be used either on the command line (CLI), Node.js or with JavaScript.
 
 
-<span style="display:block" class="tab black" markdown="1">
+<div style="display:block" class="tab black" markdown="1">
+
   <button id="text-btn" class="tablinks button active" onclick="openTab('cli')"><h2>Command line (CLI)</h2></button>
   <button id="diagram-btn" class="tablinks button" onclick="openTab('node')"><h2>Node.js</h2></button>
   <button id="diagram-btn" class="tablinks button" onclick="openTab('js')"><h2>JavaScript (Browser)</h2></button>
-</span>
+  
 
-<span style="display:block" id="cli" class="tabcontent" style="display: block;" markdown="1">
+
+<div style="display:block" id="cli" class="tabcontent" style="display: block;" markdown="1">
   
 ## Command line (CLI)
 <hr/>
@@ -115,20 +117,19 @@ omskep sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.js
 ~~~
 
 
-</span>
 
-<span style="display:block" id="node" class="tabcontent" style="display: block;" markdown="1">
+<div style="display:block" id="node" class="tabcontent" style="display: block;" markdown="1">
 
 ## Node.js
 <hr/>
 
-</span>
 
-<span style="display:block" id="js" class="tabcontent" style="display: block;" markdown="1">
+
+<div style="display:block" id="js" class="tabcontent" style="display: block;" markdown="1">
 ## JavaScript (Browser)
 <hr/>
 
-</span>
+
 
 <script>
 function openTab(name) {
