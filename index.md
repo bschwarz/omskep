@@ -9,6 +9,15 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
 # How to Use It.
 Can be used either on the command line (CLI), Node.js or with JavaScript.
 
+
+<div class="tab black">
+  <button id="text-btn" class="tablinks button active" onclick="openTab('cli')"><h2>Command line (CLI)</h2></button>
+  <button id="diagram-btn" class="tablinks button" onclick="openTab('node')"><h2>Node.js</h2></button>
+  <button id="diagram-btn" class="tablinks button" onclick="openTab('js')"><h2>JavaScript (Browser)</h2></button>
+</div>
+
+<div id="cli" class="tabcontent" style="display: block;">
+  
 ## Command line (CLI)
 <hr/>
   
@@ -106,11 +115,31 @@ omskep sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.js
 ~~~
 
 
-
+</div>
+<div id="node" class="tabcontent" style="display: block;">
 
 ## Node.js
 <hr/>
 
+</div>
+<div id="js" class="tabcontent" style="display: block;">
 ## JavaScript (Browser)
 <hr/>
 
+</div
+
+<script>
+function openTab(name) {
+  var i;
+  var x = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  var x = document.getElementsByClassName("tablinks");
+  for (i = 0; i < x.length; i++) {
+    x[i].classList.remove("active");
+  }
+  document.getElementById(name).style.display = "block";
+  document.getElementById(name+'-btn').classList.add("active");
+}
+</script>
