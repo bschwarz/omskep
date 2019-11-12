@@ -10,13 +10,13 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
 Can be used either on the command line (CLI), Node.js or with JavaScript.
 
 
-<div class="tab black">
+<div class="tab black" markdown="1">
   <button id="text-btn" class="tablinks button active" onclick="openTab('cli')"><h2>Command line (CLI)</h2></button>
   <button id="diagram-btn" class="tablinks button" onclick="openTab('node')"><h2>Node.js</h2></button>
   <button id="diagram-btn" class="tablinks button" onclick="openTab('js')"><h2>JavaScript (Browser)</h2></button>
 </div>
 
-<div id="cli" class="tabcontent" style="display: block;">
+<div id="cli" class="tabcontent" style="display: block;" markdown="1">
   
 ## Command line (CLI)
 <hr/>
@@ -116,13 +116,13 @@ omskep sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.js
 
 
 </div>
-<div id="node" class="tabcontent" style="display: block;">
+<div id="node" class="tabcontent" style="display: block;" markdown="1">
 
 ## Node.js
 <hr/>
 
 </div>
-<div id="js" class="tabcontent" style="display: block;">
+<div id="js" class="tabcontent" style="display: block;" markdown="1">
 ## JavaScript (Browser)
 <hr/>
 
