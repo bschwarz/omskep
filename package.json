@@ -14,11 +14,14 @@
     "json"
   ],
   "author": "Brett Schwarz",
-  "license": "ISC",
+  "license": "MIT",
   "bin": {
-    "omskep-cli": "./bin/omskep-cli"
+    "omskep": "./bin/omskep-cli"
   },
   "dependencies": {
     "plantuml-encoder": "^1.4.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
   }
 }
