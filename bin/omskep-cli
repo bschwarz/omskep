@@ -55,12 +55,9 @@ function handleCli(data = '') {
                 process.exit(1);
             }
             diag = new Puml(data);
-            if (opts['title'] != null) {
-                diag.title = opts['title'];
-            }
-            if (opts['theme'] != null) {
-                diag.theme = opts['theme'];
-            }
+console.dir(diag);
+            diag.title = opts['title'] != null ? opts['title'] : null;
+            diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.pumlurl(opts['pumlurl'], diag.sequence(opts)) : diag.sequence(opts);
             break;
         case 'class':
@@ -77,13 +74,8 @@ function handleCli(data = '') {
         case 'resumesummary':
             diag = new Puml(data);
             diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
-            if (opts['title'] != null) {
-                diag.title = opts['title'];
-            }
-            if (opts['theme'] != null) {
-                diag.theme = opts['theme'];
-            }
-            
+            diag.title = opts['title'] != null ? opts['title'] : null;
+            diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.resumesummary().pumlurl(opts['pumlurl']) : diag.resumesummary().puml();
             break;
     } 
