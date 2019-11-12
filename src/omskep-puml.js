@@ -16,10 +16,11 @@ class Puml extends Diagram {
         this._showLegend = false;
         this.value = '';
 
-        if ((defn.openapi) || (defn.swagger)) {
-            this.input = 'openapi';
-        } else if (defn.basics && defn.skills) {
-            this.input = 'jsonresume';
+        if (this.doctype === 'openapi3') {
+            const rest = require('./omskep-rest.js');
+            Object.assign(Puml.prototype, rest.openapi3);
+        } else if (this.doctype === 'jsonresume') {
+            // this.input = 'jsonresume';
         }
     }
     

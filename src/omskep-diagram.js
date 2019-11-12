@@ -7,6 +7,15 @@ class Diagram {
     */
     constructor(defn) {
         this.defn = JSON.parse(defn);
+        if (this.defn.openapi) {
+            const ver = this.defn.openapi.split('.').shift();
+            if (ver === '3') {
+                this.doctype = 'openapi3';
+                this.docversion = this.defn.openapi;
+            }
+        } else if (this.defn.basics.label) {
+            this.doctype = 'jsonresume';
+        }
     }
 
     /**
@@ -23,52 +32,54 @@ class Diagram {
         return Date.now()*1000 + Math.floor((Math.random() * 1000) + 1);
     }
 
-    /**
-    * Gets all the possible HTTP methods from all of the operations
-    */
-    getAllHttpMethods() {
-        let methods = new Set();
 
-        for (let P of Object.keys(this.defn.paths)) {
-            Object.keys(this.defn.paths[P]).forEach(item => methods.add(item));
-        }
-        return Array.from(methods);
-    }
 
-    /**
-    * Gets all the possible HTTP status codes for an operation
-    * @param {string} path - the resource path for this operation
-    * @param {string} verb - HTTP verb for this operation
-    */
-    getStatusCodes(path, verb) {
-        return Object.keys(this.defn.paths[path][verb].responses).sort();
-    }
+    // /**
+    // * Gets all the possible HTTP methods from all of the operations
+    // */
+    // getAllHttpMethods() {
+    //     let methods = new Set();
 
-    /**
-    * Gets all the paths, sorted by alpha and length
-    */
-    getPaths() {
-        const sf = function(a,b) {return a.localeCompare(b, 'en', {'sensitivity': 'base'});}
-        return Object.keys(this.defn.paths).sort(sf);
-    }
+    //     for (let P of Object.keys(this.defn.paths)) {
+    //         Object.keys(this.defn.paths[P]).forEach(item => methods.add(item));
+    //     }
+    //     return Array.from(methods);
+    // }
 
-    /**
-    * util function to get the operationId if exists, and generate one if it does not exist
-    * @param {string} path - the path segment of the resource
-    * @param {string} verb - the HTTP verb for this operation
-    */
-    getOperationId(path, verb) {
+    // /**
+    // * Gets all the possible HTTP status codes for an operation
+    // * @param {string} path - the resource path for this operation
+    // * @param {string} verb - HTTP verb for this operation
+    // */
+    // getStatusCodes(path, verb) {
+    //     return Object.keys(this.defn.paths[path][verb].responses).sort();
+    // }
 
-        let v = verb.toLowerCase();
+    // /**
+    // * Gets all the paths, sorted by alpha and length
+    // */
+    // getPaths() {
+    //     const sf = function(a,b) {return a.localeCompare(b, 'en', {'sensitivity': 'base'});}
+    //     return Object.keys(this.defn.paths).sort(sf);
+    // }
 
-        if (this.defn.paths[path][v].operationId) {
-            return this.defn.paths[path][v].operationId;
-        }
+    // /**
+    // * util function to get the operationId if exists, and generate one if it does not exist
+    // * @param {string} path - the path segment of the resource
+    // * @param {string} verb - the HTTP verb for this operation
+    // */
+    // getOperationId(path, verb) {
 
-        let str = path.replace('/', '').split('/').pop().replace(/{([^}]*)}/g, '$1');
+    //     let v = verb.toLowerCase();
+
+    //     if (this.defn.paths[path][v].operationId) {
+    //         return this.defn.paths[path][v].operationId;
+    //     }
+
+    //     let str = path.replace('/', '').split('/').pop().replace(/{([^}]*)}/g, '$1');
         
-        return v + str.charAt(0).toUpperCase() + str.substr(1);
-    }
+    //     return v + str.charAt(0).toUpperCase() + str.substr(1);
+    // }
 }
 
 /** Static variable to hold the statuscodes */
