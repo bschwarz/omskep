@@ -86,7 +86,12 @@ class Puml extends Diagram {
     getStatusFunction(status) {
         return status.charAt(0) === '2' ? '$success("'+status+'")' : (status.charAt(0) === '3' ? '$warning("'+status+'")' : '$failure("'+status+'")');
     }
-
+    /**
+    * returns the value of the puml diagram markdown
+    */
+    puml() {
+        return this.value;
+    }
 
     /**
     * This is just to store the plantuml config file to use when and retrieve config
@@ -233,7 +238,7 @@ class Puml extends Diagram {
         ret += '@end'+type;
 
         this.value = ret;
-        return ret;
+        return this;
     }
 
     /**
@@ -445,8 +450,7 @@ class Puml extends Diagram {
         }
         let pumlEncoder = require('plantuml-encoder');
 
-        this.value = `http://www.plantuml.com/plantuml/${imgfmt}/${pumlEncoder.encode(value)}`;
-        return this.value;
+        return `http://www.plantuml.com/plantuml/${imgfmt}/${pumlEncoder.encode(value)}`;
     }
 
     /**
@@ -459,7 +463,7 @@ class Puml extends Diagram {
         let rstar = "+", lstar = "-", star = "*";
         let str = '', pstr = '/';
         let cnt = 0;
-        let given_paths = d.getPaths(d.defn.paths);
+        let given_paths = this.getPaths();
 
         if (onesided) {
             lstar = rstar = star;
