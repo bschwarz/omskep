@@ -14,13 +14,13 @@ Can be used either on the command line (CLI), Node.js or with JavaScript.
   
 ### Syntax
 ~~~
-omskep-cli <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]
+omskep <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]
 
 ~~~
 
 ### Basic invocation
 ~~~
-omskep-cli sequence -path /pets -verb get petstore.json
+omskep sequence -path /pets -verb get petstore.json
 ~~~
 
 ### Pipe contents into the CLI
@@ -74,15 +74,15 @@ end
 ### Getting image (local plantuml)
 Generate an image by piping the output to a local ``plantuml.jar`` program.
 ~~~
-omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
+omskep sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
 ~~~
 Specifying the ``cerulean`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/) with the ``-theme`` option
 ~~~
-omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
+omskep sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
 ~~~
 Specifying the ``superhero`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/) with the ``-theme`` option
 ~~~
-omskep-cli sequence -path /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
+omskep sequence -path /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
 ~~~
 
 ![getPets Diagram](getPets.png) ![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
