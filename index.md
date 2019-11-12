@@ -17,7 +17,7 @@ Can be used either on the command line (CLI), Node.js or with JavaScript.
 </div>
 
 
-<div style="display:block" id="cli" class="tabcontent" style="display: block;" markdown="1">
+<div id="cli" class="tabcontent" style="display: block;" markdown="1">
 ## Command line (CLI)
 <hr/>
 ### Syntax
@@ -114,13 +114,13 @@ omskep sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.js
 </div>
 
 
-<div style="display:block" id="node" class="tabcontent" style="display: block;" markdown="1">
+<div id="node" class="tabcontent" style="display: none;" markdown="1">
 ## Node.js
 <hr/>
 </div>
 
 
-<div style="display:block" id="js" class="tabcontent" style="display: block;" markdown="1">
+<div id="js" class="tabcontent" style="display: none;" markdown="1">
 ## JavaScript (Browser)
 <hr/>
 </div>
