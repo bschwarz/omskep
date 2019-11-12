@@ -16,7 +16,7 @@ Can be used either on the command line (CLI), Node.js or with JavaScript.
   <button id="diagram-btn" class="tablinks button" onclick="openTab('js')"><h2>JavaScript (Browser)</h2></button>
 </div>
 
-<div id="cli" class="tabcontent" style="display: block;" markdown="1">
+<span id="cli" class="tabcontent" style="display: block;" markdown="1">
   
 ## Command line (CLI)
 <hr/>
@@ -115,7 +115,7 @@ omskep sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.js
 ~~~
 
 
-</div>
+</span>
 <div id="node" class="tabcontent" style="display: block;" markdown="1">
 
 ## Node.js
