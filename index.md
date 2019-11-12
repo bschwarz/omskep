@@ -11,7 +11,7 @@ Can be used either on the command line (CLI), Node.js or with JavaScript.
 
 
 <div style="display:block" class="tab black" markdown="1">
-  <button id="text-btn" class="tablinks button active" onclick="openTab('cli')"><h2>Command line (CLI)</h2></button>
+  <button id="text-btn" class="tablinks button active" onclick="openTab('cli')">## Command line (CLI)</button>
   <button id="diagram-btn" class="tablinks button" onclick="openTab('node')"><h2>Node.js</h2></button>
   <button id="diagram-btn" class="tablinks button" onclick="openTab('js')"><h2>JavaScript (Browser)</h2></button>
 </div>
