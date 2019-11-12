@@ -83,8 +83,8 @@ function handleCli(data = '') {
             if (opts['theme'] != null) {
                 diag.theme = opts['theme'];
             }
-            // ret = diag.resumesummary();
-            ret = opts['pumlurl'] ? diag.pumlurl(opts['pumlurl'], diag.resumesummary()) : diag.resumesummary();
+            
+            ret = opts['pumlurl'] ? diag.resumesummary().pumlurl(opts['pumlurl']) : diag.resumesummary().puml();
             break;
     } 
     // console.log('DATA :' + data);
@@ -94,12 +94,7 @@ function handleCli(data = '') {
 
     return ret;
 }
-//
-// Note: there might be cases when the TTY check might not really work, if it is run
-// in an environment that is not attached to a TTY, and the invocation is incorrect
-// in that case the 3rd branch will be active, but not correct. Need to perhaps put 
-// a timeout on that
-//
+
 let args = [];
 let opts = {};
 
@@ -128,6 +123,11 @@ for (let index = 2; index < process.argv.length; index++) {
 
 //
 // Figure out if the CLI is called correctly, and if a file is supplied or piped to command
+//
+// Note: there might be cases when the TTY check might not really work, if it is run
+// in an environment that is not attached to a TTY, and the invocation is incorrect
+// in that case the 3rd branch will be active, but not correct. Need to perhaps put 
+// a timeout on that
 //
 if (args.length < 1) {
     console.log(usage);
