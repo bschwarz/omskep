@@ -55,7 +55,6 @@ function handleCli(data = '') {
                 process.exit(1);
             }
             diag = new Puml(data);
-console.dir(diag);
             diag.title = opts['title'] != null ? opts['title'] : null;
             diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.pumlurl(opts['pumlurl'], diag.sequence(opts)) : diag.sequence(opts);
