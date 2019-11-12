@@ -11,11 +11,9 @@ Can be used either on the command line (CLI), Node.js or with JavaScript.
 
 
 <div style="display:block" class="tab black" markdown="1">
-  <button id="text-btn" class="tablinks button active" onclick="openTab('cli')">
-  ## Command line (CLI)
-  </button>
-  <button id="diagram-btn" class="tablinks button" onclick="openTab('node')"><h2>Node.js</h2></button>
-  <button id="diagram-btn" class="tablinks button" onclick="openTab('js')"><h2>JavaScript (Browser)</h2></button>
+  <button id="text-btn" class="tablinks button active" onclick="openTab('cli')">Command line (CLI)</button>
+  <button id="diagram-btn" class="tablinks button" onclick="openTab('node')">Node.js</button>
+  <button id="diagram-btn" class="tablinks button" onclick="openTab('js')">JavaScript (Browser)</button>
 </div>
 
 
@@ -34,7 +32,7 @@ omskep sequence -path /pets -verb get petstore.json
 
 ### Pipe contents into the CLI
 ~~~
-cat petstore.json | omskep-cli sequence -path /pets -verb get -server %title% 
+cat petstore.json | omskep sequence -path /pets -verb get 
 ~~~
 
 ### Output
