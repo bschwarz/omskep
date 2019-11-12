@@ -9,18 +9,27 @@ Assists in the generatation of diagrams (png, svg, canvas, etc) based on standar
 # How to Use It.
 Can be used either on the command line (CLI), Node.js or with JavaScript.
 
+
+<div class="tab black">
+  <button id="text-btn" class="tablinks button active" onclick="openTab('cli')"><h2>Command line (CLI)</h2></button>
+  <button id="diagram-btn" class="tablinks button" onclick="openTab('node')"><h2>Node.js</h2></button>
+  <button id="diagram-btn" class="tablinks button" onclick="openTab('js')"><h2>JavaScript (Browser)</h2></button>
+</div>
+
+<div id="cli" class="tabcontent" style="display: block;">
+  
 ## Command line (CLI)
 <hr/>
   
 ### Syntax
 ~~~
-omskep-cli <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]
+omskep <diagram type> [options (key/value pairs)] <input file> [<input file> <input file> ...]
 
 ~~~
 
 ### Basic invocation
 ~~~
-omskep-cli sequence -path /pets -verb get petstore.json
+omskep sequence -path /pets -verb get petstore.json
 ~~~
 
 ### Pipe contents into the CLI
@@ -74,15 +83,15 @@ end
 ### Getting image (local plantuml)
 Generate an image by piping the output to a local ``plantuml.jar`` program.
 ~~~
-omskep-cli sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
+omskep sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
 ~~~
 Specifying the ``cerulean`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/) with the ``-theme`` option
 ~~~
-omskep-cli sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
+omskep sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
 ~~~
 Specifying the ``superhero`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/) with the ``-theme`` option
 ~~~
-omskep-cli sequence -path /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
+omskep sequence -path /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
 ~~~
 
 ![getPets Diagram](getPets.png) ![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
@@ -94,23 +103,43 @@ If you don't have a local install of the ``plantuml.jar`` program, you can use t
 
 Using ``wget`` with command substitution
 ~~~
-wget $(omskep-cli sequence -path /pets -verb get -pumlurl png petstore.json) -O getPets.png
+wget $(omskep sequence -path /pets -verb get -pumlurl png petstore.json) -O getPets.png
 ~~~
 Using ``curl`` with command substitution.
 ~~~
-curl --url $(omskep-cli sequence -path /pets -verb get -theme cerulean -pumlurl png petstore.json) > getPets.png
+curl --url $(omskep sequence -path /pets -verb get -theme cerulean -pumlurl png petstore.json) > getPets.png
 ~~~
 Using ``curl`` with ``xargs``
 ~~~
-omskep-cli sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.json | xargs curl > getPets.svg
+omskep sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.json | xargs curl > getPets.svg
 ~~~
 
 
-
+</div>
+<div id="node" class="tabcontent" style="display: block;">
 
 ## Node.js
 <hr/>
 
+</div>
+<div id="js" class="tabcontent" style="display: block;">
 ## JavaScript (Browser)
 <hr/>
 
+</div
+
+<script>
+function openTab(name) {
+  var i;
+  var x = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  var x = document.getElementsByClassName("tablinks");
+  for (i = 0; i < x.length; i++) {
+    x[i].classList.remove("active");
+  }
+  document.getElementById(name).style.display = "block";
+  document.getElementById(name+'-btn').classList.add("active");
+}
+</script>
