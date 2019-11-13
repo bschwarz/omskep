@@ -1,0 +1,70 @@
+{
+   "title": "API with Examples",
+   "types": {
+      "User": {
+         "type": "object",
+         "properties": {
+            "name": "string",
+            "lastname": "string"
+         },
+         "example": {
+            "name": "Bob",
+            "lastname": "Marley"
+         }
+      },
+      "Org": {
+         "type": "object",
+         "properties": {
+            "name": "string",
+            "address?": "string",
+            "value?": "string"
+         }
+      }
+   },
+   "/organisation": {
+      "post": {
+         "headers": {
+            "UserID": {
+               "description": "the identifier for the user that posts a new organisation",
+               "type": "string",
+               "example": "SWED-123"
+            }
+         },
+         "body": {
+            "application/json": {
+               "type": "Org",
+               "example": {
+                  "value": {
+                     "name": "Doe Enterprise",
+                     "value": "Silver"
+                  }
+               }
+            }
+         }
+      },
+      "get": {
+         "description": "Returns an organisation entity.",
+         "responses": {
+            "201": {
+               "body": {
+                  "application/json": {
+                     "type": "Org",
+                     "examples": {
+                        "acme": {
+                           "name": "Acme"
+                        },
+                        "softwareCorp": {
+                           "value": {
+                              "name": "Software Corp",
+                              "address": "35 Central Street",
+                              "value": "Gold"
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}
