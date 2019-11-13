@@ -13,8 +13,10 @@ class Diagram {
                 this.doctype = 'openapi3';
                 this.docversion = this.defn.openapi;
             }
-        } else if (this.defn.basics.label) {
+        } else if (this.defn.basics && this.defn.basics.label && this.defn.work) {
             this.doctype = 'jsonresume';
+        } else if (this.defn.title && Object.keys(this.defn).filter(x => x.charAt(0) === '/')) {
+            this.doctype = 'raml';
         }
     }
 
