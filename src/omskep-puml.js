@@ -21,6 +21,9 @@ class Puml extends Diagram {
             Object.assign(Puml.prototype, rest.openapi3);
         } else if (this.doctype === 'jsonresume') {
             // this.input = 'jsonresume';
+        } else if (this.doctype === 'raml') {
+            const rest = require('./omskep-rest.js');
+            Object.assign(Puml.prototype, rest.raml);
         }
     }
     
@@ -125,7 +128,7 @@ class Puml extends Diagram {
     */
     getSeqTitle(opid = '') {
         let t1 = `title ${this.title}`;
-        let t2 = `title ${this.defn.info.title} ${this.defn.info.version}`;
+        let t2 = `title ${this.getTitle()} ${this.getVersion()}`;
         let t3 = '';
         let ret = '';
 
@@ -384,6 +387,13 @@ class Puml extends Diagram {
         let ret = '@startuml\n';
         let statuses = this.getStatusCodes(params.path, params.verb);
         let opid = this.getOperationId(params.path, params.verb);
+        let code, description;
+
+        if (! this.operationExists(params.path, params.verb)) {
+            // throw new Error('Operation does not exist in definition file');
+            // TODO: might change this to throw an error instead of returning empty
+            return '';
+        }        
         
         ret += this.getTheme() +'\n\n';
         ret += Puml.httpMethodColors + '\n';
@@ -398,7 +408,7 @@ class Puml extends Diagram {
                 ret += `<b>${sum}\n\n`;
             }
             ret += '|= HTTP Status |= Reason Phrase |\n';
-            ret += statuses.sort().map(x => `| ${this.getStatusFunction(x)} | ${Diagram.statuscodes.find(y => y.code === x).reasonphrase} |`).join('\n');
+            ret += statuses.map(x => x.code).sort().map(x => `| ${this.getStatusFunction(x)} | ${Diagram.statuscodes.find(y => y.code === x).reasonphrase} |`).join('\n');
             ret += '\nendlegend\n\n'
         }
         ret += this.getSeqTitle(opid) + '\n\n';
@@ -424,10 +434,12 @@ class Puml extends Diagram {
 
         ret += 'alt ';
         for (let S of statuses) {
+            ({code, description} = S);
             // ret += this.defn.paths[params.url][params.verb].responses[S].description || (S.charAt(0) === '2' ? 'Successful Request' : 'UnSuccessful Request');
-            ret += this.defn.paths[params.path][params.verb].responses[S].description + '\n';
+            // ret += this.defn.paths[params.path][params.verb].responses[S].description + '\n';
+            ret += description + '\n';
             ret += 'G-->C: HTTP ';
-            ret += this.getStatusFunction(S);
+            ret += this.getStatusFunction(code);
             ret += '\nelse ';
         }
         
@@ -437,7 +449,7 @@ class Puml extends Diagram {
         ret += '@enduml';
         
         this.value = ret;
-        return ret;
+        return this;
     }
 
     /**
@@ -523,9 +535,9 @@ class Puml extends Diagram {
     */
     substVariables(str, opid = '') {
         let map = {};
-        map['%apiname%'] = this.defn.info.title;
-        map['%title%'] = this.defn.info.title;
-        map['%version%'] = this.defn.info.version;
+        map['%apiname%'] = this.getTitle();
+        map['%title%'] = this.getTitle();
+        map['%version%'] = this.getVersion();
         if (opid != '') {
             map['%operationid%'] = opid;
         }
