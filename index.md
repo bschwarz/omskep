@@ -26,11 +26,13 @@ omskep <diagram type> [options (key/value pairs)] <input file> [<input file> <in
 ~~~
 
 ### Basic invocation
+Generate plantuml sequence markdown for an operation (GET /pets) from a Swagger file
 ~~~
 omskep sequence -path /pets -verb get petstore.json
 ~~~
 
 ### Pipe contents into the CLI
+If the input file (Swagger file here) is generated from some other process, it can be piped into ``omskep``
 ~~~
 cat petstore.json | omskep sequence -path /pets -verb get 
 ~~~
