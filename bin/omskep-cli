@@ -57,7 +57,7 @@ function handleCli(data = '') {
             diag = new Puml(data);
             diag.title = opts['title'] != null ? opts['title'] : null;
             diag.theme = opts['theme'] != null ? opts['theme'] : null;
-            ret = opts['pumlurl'] ? diag.pumlurl(opts['pumlurl'], diag.sequence(opts)) : diag.sequence(opts);
+            ret = opts['pumlurl'] ? diag.sequence(opts).pumlurl(opts['pumlurl']) : diag.sequence(opts).puml();
             break;
         case 'class':
             console.log('CLASS');
