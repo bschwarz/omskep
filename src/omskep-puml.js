@@ -28,8 +28,6 @@ class Puml extends Diagram {
             const aws = require('./omskep-aws.js');
             Object.assign(Puml.prototype, aws.cloudformation);
         }
-
-        console.dir(this.getResources());
     }
     
     /**
