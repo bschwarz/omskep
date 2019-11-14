@@ -36,6 +36,13 @@ If the input file (Swagger file here) is generated from some other process, it c
 ~~~
 cat petstore.json | omskep sequence -path /pets -verb get 
 ~~~
+with OAS=https://raw.githubusercontent.com/bschwarz/omskep/master/petstore-openapi3.json
+~~~
+wget -qO- $OAS | omskep sequence -path /pets -verb get 
+~~~
+~~~
+curl $OAS | omskep sequence -path /pets -verb get 
+~~~
 
 ### Output
 ~~~
