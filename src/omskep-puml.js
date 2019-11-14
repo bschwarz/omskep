@@ -24,7 +24,12 @@ class Puml extends Diagram {
         } else if (this.doctype === 'raml') {
             const rest = require('./omskep-rest.js');
             Object.assign(Puml.prototype, rest.raml);
+        } else if (this.doctype === 'cft') {
+            const aws = require('./omskep-aws.js');
+            Object.assign(Puml.prototype, aws.cloudformation);
         }
+
+        console.dir(this.getResources());
     }
     
     /**
@@ -242,6 +247,14 @@ class Puml extends Diagram {
         ret += '@end'+type;
 
         this.value = ret;
+        return this;
+    }
+
+    /**
+    * Generates the deployment diagram based on a CFT file
+    */
+    deployment() {
+        this.value = this.getResources().map(x => `node \"${x.id}\\n${x.type}\"`).join('\n');
         return this;
     }
 

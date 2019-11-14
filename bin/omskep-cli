@@ -77,6 +77,13 @@ function handleCli(data = '') {
             diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.resumesummary().pumlurl(opts['pumlurl']) : diag.resumesummary().puml();
             break;
+        case 'deployment':
+            diag = new Puml(data);
+            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
+            diag.title = opts['title'] != null ? opts['title'] : null;
+            diag.theme = opts['theme'] != null ? opts['theme'] : null;
+            ret = opts['pumlurl'] ? diag.deployment().pumlurl(opts['pumlurl']) : diag.deployment().puml();
+            break;
     } 
     // console.log('DATA :' + data);
     // let d = new Puml(data);

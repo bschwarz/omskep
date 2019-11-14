@@ -17,7 +17,10 @@ class Diagram {
             this.doctype = 'jsonresume';
         } else if (this.defn.title && Object.keys(this.defn).filter(x => x.charAt(0) === '/')) {
             this.doctype = 'raml';
+        } else if (this.defn.AWSTemplateFormatVersion) {
+            this.doctype = 'cft';
         }
+        
     }
 
     /**
