@@ -36,13 +36,17 @@ let openapi3 = {
     getStatusCodes(path, verb) {
         let defn = this.defn.paths;
         let ret = [];
+        let d,m;
 
         if (defn[path] && defn[path][verb] && defn[path][verb].responses) {
             for (let R of Object.keys(defn[path][verb].responses).sort()) {
-                const d = defn[path][verb].responses.description || '';
-                ret.push({code: R, description: d});
+                d = defn[path][verb].responses[R].description || '';
+                m = defn[path][verb].responses[R].content ? Object.keys(defn[path][verb].responses[R].content) : [];
+                ret.push({code: R, description: d, media: m});
             }
         }
+
+        console.dir(ret)
         return ret;
     },
     /**
@@ -85,8 +89,22 @@ let openapi3 = {
     * @param {string} path - the path segment of the resource
     */
     pathExists(path) {
-
         return this.defn.paths[path] ? true : false;
+    },
+    /**
+    * gets the media types for an operation request
+    * @param {string} path - the path segment of the resource
+    * @param {string} verb - HTTP verb of the operation
+    */
+    getOperationRequest(path, verb) {
+        let ret = [];
+        if (! this.operationExists(path, verb)) return [];
+        
+        if (this.defn.paths[path][verb]['requestBody']['content']) {
+            ret = Object.keys(this.defn.paths[path][verb]['requestBody']['content']);
+        }
+
+        return ret
     }
 }
 
@@ -124,11 +142,13 @@ let raml = {
     getStatusCodes(path, verb) {
         let defn = this.defn;
         let ret = [];
+        let d,m;
 
         if (defn[path] && defn[path][verb] && defn[path][verb].responses) {
             for (let R of Object.keys(defn[path][verb].responses).sort()) {
-                const d = defn[path][verb].responses.description || '';
-                ret.push({code: R, description: d});
+                d = defn[path][verb].responses[R].description || '';
+                m = defn[path][verb].responses[R].body ? Object.keys(defn[path][verb].responses[R].body) : [];
+                ret.push({code: R, description: d, media: m});
             }
         }
         return ret;
@@ -166,7 +186,7 @@ let raml = {
         let v = verb.toLowerCase();
 
         // TODO: might have to normalize the path because they can be nested
-        return (this.defn[path] && this.defn.paths[path][v]) ? true : false;
+        return (this.defn[path] && this.defn[path][v]) ? true : false;
     },
     /**
     * util to check if an path exists in the definition
@@ -176,6 +196,21 @@ let raml = {
 
         // TODO: might need to normalize this because paths can be nested
         return this.defn[path] ? true : false;
+    },
+    /**
+    * gets the media types for an operation request
+    * @param {string} path - the path segment of the resource
+    * @param {string} verb - HTTP verb of the operation
+    */
+    getOperationRequest(path, verb) {
+        let ret = [];
+        if (! this.operationExists(path, verb)) return [];
+        
+        if (this.defn[path][verb]['body']) {
+            ret = Object.keys(this.defn.paths[path][verb]['body']);
+        }
+
+        return ret
     }
 }
 

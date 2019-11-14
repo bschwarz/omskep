@@ -398,7 +398,7 @@ class Puml extends Diagram {
         let ret = '@startuml\n';
         let statuses = this.getStatusCodes(params.path, params.verb);
         let opid = this.getOperationId(params.path, params.verb);
-        let code, description;
+        let code, description, media;
 
         if (! this.operationExists(params.path, params.verb)) {
             // throw new Error('Operation does not exist in definition file');
@@ -445,12 +445,12 @@ class Puml extends Diagram {
 
         ret += 'alt ';
         for (let S of statuses) {
-            ({code, description} = S);
+            ({code, description, media} = S);
             // ret += this.defn.paths[params.url][params.verb].responses[S].description || (S.charAt(0) === '2' ? 'Successful Request' : 'UnSuccessful Request');
             // ret += this.defn.paths[params.path][params.verb].responses[S].description + '\n';
             ret += description + '\n';
             ret += 'G-->C: HTTP ';
-            ret += this.getStatusFunction(code);
+            ret += this.getStatusFunction(code) + '\\n' + media.join(' || ');
             ret += '\nelse ';
         }
         
