@@ -37,6 +37,10 @@ function handleCli(data = '') {
             console.error(usage);
             process.exit(1);
         }
+        if (! fs.existsSync(args[1])) {
+            console.error('Can not find the file '+ args[1]);
+            process.exit(1);
+        }
         data = fs.readFileSync(args[1], 'utf8');
     }
     
@@ -47,54 +51,35 @@ function handleCli(data = '') {
             process.exit(1);
         }
     }
-    
+    //
+    // For now, assume only puml diagrams, but in future have a flag if it is some
+    // other diagram (i.e. mermaid, dc3, etc)
+    //
+    diag = new Puml(data);
+    diag.title = opts['title'] != null ? opts['title'] : null;
+    diag.theme = opts['theme'] != null ? opts['theme'] : null;
+
     switch(args[0]) {
         case 'sequence':
             if (!opts['resource'] || !opts['verb']) {
                 console.error('Error: Sequence diagrams need the -path and -verb options specified.');
                 process.exit(1);
             }
-            diag = new Puml(data);
-            diag.title = opts['title'] != null ? opts['title'] : null;
-            diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.sequence(opts).pumlurl(opts['pumlurl']) : diag.sequence(opts).puml();
             break;
         case 'class':
-            console.log('CLASS');
-            diag = new Puml(data);
-            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
-            diag.title = opts['title'] != null ? opts['title'] : null;
-            diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.class().pumlurl(opts['pumlurl']) : diag.class().puml();
             break;
         case 'wbs':
-            diag = new Puml(data);
-            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
-            diag.title = opts['title'] != null ? opts['title'] : null;
-            diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.wbs().pumlurl(opts['pumlurl']) : diag.wbs().puml();
-            console.log('WPS');
             break;
         case 'mindmap':
-            diag = new Puml(data);
-            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
-            diag.title = opts['title'] != null ? opts['title'] : null;
-            diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.mindmap().pumlurl(opts['pumlurl']) : diag.mindmap().puml();
-            console.log('MIND');
             break;
         case 'resumesummary':
-            diag = new Puml(data);
-            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
-            diag.title = opts['title'] != null ? opts['title'] : null;
-            diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.resumesummary().pumlurl(opts['pumlurl']) : diag.resumesummary().puml();
             break;
         case 'deployment':
-            diag = new Puml(data);
-            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
-            diag.title = opts['title'] != null ? opts['title'] : null;
-            diag.theme = opts['theme'] != null ? opts['theme'] : null;
             ret = opts['pumlurl'] ? diag.deployment().pumlurl(opts['pumlurl']) : diag.deployment().puml();
             break;
     } 
@@ -111,10 +96,10 @@ let opts = {};
 
 //
 // Valid cli args use cases
-//   omskep sequence filename
-//   omskep sequence -option1 val1 -option2 val2... filename
-//   cat filename | omskep sequence
-//   cat filename | omskep sequence -option1 val1 -option2 val2...
+//   omskep <diagram> <filename>
+//   omskep <diagram> -option1 val1 -option2 val2... <filename>
+//   cat <filename> | omskep <diagram>
+//   cat <filename> | omskep <diagram> -option1 val1 -option2 val2...
 //
 for (let index = 2; index < process.argv.length; index++) {
     if (process.argv[index].charAt(0) === '-') {
