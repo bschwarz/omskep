@@ -30,7 +30,18 @@ function handleCli(data = '') {
     // console.dir(args);
 
     //
-    // Assume if no data, then a filename was given on cli instead of pipe
+    // There is a weird behavior on windows using emulation (i.e. git bash), if the value to the -resource
+    // argument begins with a /, then windows expands that to the current working directory
+    // Work arround is to prepend // to the path. Here we check if // is prepend and windows
+    //
+    if ((opts['resource']) && (process.platform === 'win32') && (opts['resource'].match('C:/'))) {
+        console.log(opts['resource']);
+        console.error('For windows CLI, you must prepend the value to the "resource" argument with "//" instead of just "/"');
+        process.exit(1);
+    }
+
+    //
+    // If no data, then a filename was given on cli instead of pipe
     //
     if (data === '') {
         if (args.length < 2) {
@@ -107,6 +118,7 @@ for (let index = 2; index < process.argv.length; index++) {
             console.error(usage);
             process.exit(1);
         }
+        console.log(process.argv[index+1]);
         opts[process.argv[index].substr(1)] = process.argv[index+1];
         index++;
     } else {
