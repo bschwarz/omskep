@@ -191,7 +191,7 @@ class Puml extends Diagram {
         ret += '@endmindmap';
 
         this.value = ret;
-        return ret;
+        return this;
     }
 
     /**
@@ -285,7 +285,7 @@ class Puml extends Diagram {
         ret += '@endwbs';
 
         this.value = ret;
-        return ret;
+        return this;
     }
 
     /**
@@ -320,7 +320,7 @@ class Puml extends Diagram {
         ret += '\n@enduml';
 
         this.value = ret;
-        return ret;
+        return this;
     }
 
     /**
@@ -332,7 +332,7 @@ class Puml extends Diagram {
         let cnt = 0;
         let ret = {classes: [], paths: []};
         let prev = 'api';
-        let given_paths = d.getPaths(d.defn.paths);
+        let given_paths = this.getPaths(this.defn.paths);
 
         //
         // Loop over paths in the swagger file, assuming the paths
@@ -379,7 +379,7 @@ class Puml extends Diagram {
                 //
                 if (S === segs.length-1) {
                     // str += "_";
-                    obj.methods = Object.keys(d.defn.paths[P]);
+                    obj.methods = Object.keys(this.defn.paths[P]);
                 }
 
                 ret.classes.push(obj);
@@ -396,14 +396,16 @@ class Puml extends Diagram {
     */
     sequence(params) {
         let ret = '@startuml\n';
-        let statuses = this.getStatusCodes(params.path, params.verb);
-        let opid = this.getOperationId(params.path, params.verb);
+        let statuses = this.getStatusCodes(params.resource, params.verb);
+        let opid = this.getOperationId(params.resource, params.verb);
         let code, description, media;
+        params.resource = params.resource.replace('//', '/');;
 
-        if (! this.operationExists(params.path, params.verb)) {
+        if (! this.operationExists(params.resource, params.verb)) {
             // throw new Error('Operation does not exist in definition file');
             // TODO: might change this to throw an error instead of returning empty
-            return '';
+            this.value = '';
+            return this;
         }        
         
         ret += this.getTheme() +'\n\n';
@@ -530,7 +532,7 @@ class Puml extends Diagram {
                 //
                 if (S === segs.length-1) {
                     // str += "_";
-                    for (let M of Object.keys(d.defn.paths[P])) {
+                    for (let M of Object.keys(this.defn.paths[P])) {
                         str += star.repeat(S+indent+1) + '_ ' + M.toUpperCase() + '\n';
                     }
                 }

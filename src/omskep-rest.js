@@ -46,7 +46,7 @@ let openapi3 = {
             }
         }
 
-        console.dir(ret)
+        // console.dir(ret)
         return ret;
     },
     /**

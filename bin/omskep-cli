@@ -50,7 +50,7 @@ function handleCli(data = '') {
     
     switch(args[0]) {
         case 'sequence':
-            if (!opts['path'] || !opts['verb']) {
+            if (!opts['resource'] || !opts['verb']) {
                 console.error('Error: Sequence diagrams need the -path and -verb options specified.');
                 process.exit(1);
             }
@@ -61,13 +61,26 @@ function handleCli(data = '') {
             break;
         case 'class':
             console.log('CLASS');
-            break;
-        case 'wps':
+            diag = new Puml(data);
             diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
+            diag.title = opts['title'] != null ? opts['title'] : null;
+            diag.theme = opts['theme'] != null ? opts['theme'] : null;
+            ret = opts['pumlurl'] ? diag.class().pumlurl(opts['pumlurl']) : diag.class().puml();
+            break;
+        case 'wbs':
+            diag = new Puml(data);
+            diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
+            diag.title = opts['title'] != null ? opts['title'] : null;
+            diag.theme = opts['theme'] != null ? opts['theme'] : null;
+            ret = opts['pumlurl'] ? diag.wbs().pumlurl(opts['pumlurl']) : diag.wbs().puml();
             console.log('WPS');
             break;
         case 'mindmap':
+            diag = new Puml(data);
             diag.newStyle = opts['newStyle'] ? opts['newStyle'] : false;
+            diag.title = opts['title'] != null ? opts['title'] : null;
+            diag.theme = opts['theme'] != null ? opts['theme'] : null;
+            ret = opts['pumlurl'] ? diag.mindmap().pumlurl(opts['pumlurl']) : diag.mindmap().puml();
             console.log('MIND');
             break;
         case 'resumesummary':
