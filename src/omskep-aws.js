@@ -2,14 +2,13 @@
 // This file contains AWS methods that get mixed in to the classes
 //
 
-let cloudformation = {
+let cft = {
     /**
     * Gets all the resources in a cloud formation file, sorted by alpha and length
     */
     getResources() {
-        const sf = function(a,b) {return a.localeCompare(b, 'en', {'sensitivity': 'base'});}
         let ret = [];
-        for (let R of Object.keys(this.defn.Resources).sort(sf)) {
+        for (let R of Object.keys(this.defn.Resources)) {
             ret.push({id: R, type: this.defn.Resources[R].Type});
         };
         return ret;
@@ -17,5 +16,5 @@ let cloudformation = {
 }
 
 module.exports = {
-    cloudformation: cloudformation
+    cft: cft
 }
