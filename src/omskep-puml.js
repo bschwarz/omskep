@@ -26,7 +26,10 @@ class Puml extends Diagram {
             Object.assign(Puml.prototype, rest.raml);
         } else if (this.doctype === 'cft') {
             const aws = require('./omskep-aws.js');
-            Object.assign(Puml.prototype, aws.cloudformation);
+            Object.assign(Puml.prototype, aws.cft);
+        } else if (this.doctype === 'arm') {
+            const azure = require('./omskep-azure.js');
+            Object.assign(Puml.prototype, azure.arm);
         }
     }
     
@@ -476,7 +479,7 @@ class Puml extends Diagram {
         }
         let pumlEncoder = require('plantuml-encoder');
 
-        return `http://www.plantuml.com/plantuml/${imgfmt}/${pumlEncoder.encode(value)}`;
+        return `${imgfmt}/${pumlEncoder.encode(value)}`;
     }
 
     /**

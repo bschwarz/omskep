@@ -19,6 +19,8 @@ class Diagram {
             this.doctype = 'raml';
         } else if (this.defn.AWSTemplateFormatVersion) {
             this.doctype = 'cft';
+        } else if (this.defn['$schema'] && this.defn['$schema'].match('azure')) {
+            this.doctype = 'arm';
         }
         
     }
