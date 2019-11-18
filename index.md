@@ -28,20 +28,20 @@ omskep <diagram type> [options (key/value pairs)] <input file> [<input file> <in
 ### Basic invocation
 Generate plantuml sequence markdown for an operation (GET /pets) from a Swagger file
 ~~~
-omskep sequence -path /pets -verb get petstore.json
+omskep sequence -resource /pets -verb get petstore.json
 ~~~
 
 ### Pipe contents into the CLI
 If the input file (Swagger file here) is generated from some other process, it can be piped into ``omskep``
 ~~~
-cat petstore.json | omskep sequence -path /pets -verb get 
+cat petstore.json | omskep sequence -resource /pets -verb get 
 ~~~
 with ``OAS=https://raw.githubusercontent.com/bschwarz/omskep/master/petstore-openapi3.json``
 ~~~
-wget -qO- $OAS | omskep sequence -path /pets -verb get 
+wget -qO- $OAS | omskep sequence -resource /pets -verb get 
 ~~~
 ~~~
-curl $OAS | omskep sequence -path /pets -verb get 
+curl $OAS | omskep sequence -resource /pets -verb get 
 ~~~
 
 ### Output
@@ -90,15 +90,15 @@ end
 ### Getting image (local plantuml)
 Generate an image by piping the output to a local ``plantuml.jar`` program.
 ~~~
-omskep sequence -path /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
+omskep sequence -resource /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
 ~~~
 Specifying the ``cerulean`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/) with the ``-theme`` option
 ~~~
-omskep sequence -path /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
+omskep sequence -resource /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
 ~~~
 Specifying the ``superhero`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/) with the ``-theme`` option
 ~~~
-omskep sequence -path /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
+omskep sequence -resource /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
 ~~~
 
 ![getPets Diagram](getPets.png) ![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
@@ -110,15 +110,15 @@ If you don't have a local install of the ``plantuml.jar`` program, you can use t
 
 Using ``wget`` with command substitution
 ~~~
-wget $(omskep sequence -path /pets -verb get -pumlurl png petstore.json) -O getPets.png
+wget $(omskep sequence -resource /pets -verb get -pumlurl png petstore.json) -O getPets.png
 ~~~
 Using ``curl`` with command substitution.
 ~~~
-curl --url $(omskep sequence -path /pets -verb get -theme cerulean -pumlurl png petstore.json) > getPets.png
+curl --url $(omskep sequence -resource /pets -verb get -theme cerulean -pumlurl png petstore.json) > getPets.png
 ~~~
 Using ``curl`` with ``xargs``
 ~~~
-omskep sequence -path /pets -verb get -theme superhero -pumlurl svg  petstore.json | xargs curl > getPets.svg
+omskep sequence -resource /pets -verb get -theme superhero -pumlurl svg  petstore.json | xargs curl > getPets.svg
 ~~~
 </div>
 
