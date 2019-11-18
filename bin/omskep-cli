@@ -3,6 +3,7 @@
 const puml = require('../src/omskep-puml.js')
 const fs = require('fs');
 const path = require('path');
+
 // Catch this cause it is optional
 let pumlEncoder = require('plantuml-encoder');
 // try {
@@ -28,6 +29,14 @@ function handleCli(data = '') {
 
     // console.dir(opts);
     // console.dir(args);
+    
+    // special handling for -pumlurl, since it relies on plantuml-encoder package
+    if ((opts['pumlurl'] != null) && (opts['pumlurl'])) {
+        if (! pumlEncoder) {
+            console.error('Please install "plantuml-encoder" to use -pumlurl option');
+            process.exit(1);
+        }
+    }
 
     //
     // There is a weird behavior on windows using emulation (i.e. git bash), if the value to the -resource
@@ -55,13 +64,7 @@ function handleCli(data = '') {
         data = fs.readFileSync(args[1], 'utf8');
     }
     
-    // special handling for -pumlurl, since it relies on plantuml-encoder package
-    if ((opts['pumlurl'] != null) && (opts['pumlurl'])) {
-        if (! pumlEncoder) {
-            console.error('Please install "plantuml-encoder" to use -pumlurl option');
-            process.exit(1);
-        }
-    }
+
     //
     // For now, assume only puml diagrams, but in future have a flag if it is some
     // other diagram (i.e. mermaid, dc3, etc)
