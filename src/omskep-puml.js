@@ -441,7 +441,7 @@ class Puml extends Diagram {
             ret += `participant "${params.server}" as B\n`;
         }
 
-        ret += `C->G: ${params.verb.toUpperCase()} ${params.path}\n`;
+        ret += `C->G: ${params.verb.toUpperCase()} ${params.resource}\n`;
         ret += 'activate G\n';
         if (params.server) {
             ret += `G->B: request to API service\n`;
@@ -455,7 +455,7 @@ class Puml extends Diagram {
             // ret += this.defn.paths[params.path][params.verb].responses[S].description + '\n';
             ret += description + '\n';
             ret += 'G-->C: HTTP ';
-            ret += this.getStatusFunction(code) + '\\n' + media.join(' || ');
+            ret += this.getStatusFunction(code) + '\\n<i><size:9>' + media.join(' || ');
             ret += '\nelse ';
         }
         
