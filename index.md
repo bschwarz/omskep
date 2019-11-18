@@ -90,15 +90,15 @@ end
 ### Getting image (local plantuml)
 Generate an image by piping the output to a local ``plantuml.jar`` program.
 ~~~
-omskep sequence -resource /pets -verb get petstore.json | java -jar plantuml.jar -pipe > getPets.png
+omskep sequence -resource /pets -verb get -icons true petstore.json | java -jar plantuml.jar -pipe > getPets.png
 ~~~
 Specifying the ``cerulean`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/) with the ``-theme`` option
 ~~~
-omskep sequence -resource /pets -verb get -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
+omskep sequence -resource /pets -verb get -icons true -theme cerulean petstore.json | java -jar plantuml.jar -pipe > getPets-cerulean.png
 ~~~
 Specifying the ``superhero`` theme from [puml-themes](https://bschwarz.github.io/puml-themes/) with the ``-theme`` option
 ~~~
-omskep sequence -resource /pets -verb get -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
+omskep sequence -resource /pets -verb get -icons true -theme superhero petstore.json | java -jar plantuml.jar -pipe > getPets-superhero.png
 ~~~
 
 ![getPets Diagram](getPets.png) ![getPets Cerulean Diagram](getPets-cerulean.png) ![getPets Superhero Diagram](getPets-superhero.png)
