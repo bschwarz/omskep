@@ -430,15 +430,15 @@ class Puml extends Diagram {
         ret += this.getSeqTitle(opid) + '\n\n';
 
         params.client = (!params.client) ? 'Client' : params.client;
-        params.gw = (!params.gw) ? 'API Gateway' : params.gw;
+        params.gw = (!params.gw) ? 'API GW' : params.gw;
         // params.autonumber = (!params.autonumber) ? false : params.gw;
 
-        ret += `participant "${params.client}" as C\n`;
-        ret += `participant "${params.gw}" as G\n`;
+        ret += `participant "<size:32><&monitor>\\n${params.client}" as C\n`;
+        ret += `participant "<size:32><&cloud>\\n${params.gw}" as G\n`;
         
         if (params.server) {
             params.server = this.substVariables(params.server);
-            ret += `participant "${params.server}" as B\n`;
+            ret += `participant "<size:32><&hard-drive>\\n${params.server}" as B\n`;
         }
 
         ret += `C->G: ${params.verb.toUpperCase()} ${params.resource}\n`;
