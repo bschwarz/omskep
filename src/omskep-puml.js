@@ -402,6 +402,7 @@ class Puml extends Diagram {
         let statuses = this.getStatusCodes(params.resource, params.verb);
         let opid = this.getOperationId(params.resource, params.verb);
         let code, description, media;
+        let icons = '';
         params.resource = params.resource.replace('//', '/');;
 
         if (! this.operationExists(params.resource, params.verb)) {
@@ -432,13 +433,15 @@ class Puml extends Diagram {
         params.client = (!params.client) ? 'Client' : params.client;
         params.gw = (!params.gw) ? 'API GW' : params.gw;
         // params.autonumber = (!params.autonumber) ? false : params.gw;
-
-        ret += `participant "<size:32><&monitor>\\n${params.client}" as C\n`;
-        ret += `participant "<size:32><&cloud>\\n${params.gw}" as G\n`;
+        icons = params.icons ? '<size:32><&monitor>\\n' : '';
+        ret += `participant "${icons}${params.client}" as C\n`;
+        icons = params.icons ? '<size:32><&cloud>\\n' : '';
+        ret += `participant "${icons}${params.gw}" as G\n`;
         
         if (params.server) {
             params.server = this.substVariables(params.server);
-            ret += `participant "<size:32><&hard-drive>\\n${params.server}" as B\n`;
+            icons = params.icons ? '<size:32><&hard-drive>\\n' : '';
+            ret += `participant "${icons}${params.server}" as B\n`;
         }
 
         ret += `C->G: ${params.verb.toUpperCase()} ${params.resource}\n`;
