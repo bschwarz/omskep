@@ -72,6 +72,7 @@ function handleCli(data = '') {
     diag = new Puml(data);
     diag.title = opts['title'] != null ? opts['title'] : null;
     diag.theme = opts['theme'] != null ? opts['theme'] : null;
+    diag.pumlserver = opts['pumlserver'] != null ? opts['pumlserver'] : diag.pumlserver;
 
     switch(args[0]) {
         case 'sequence':
