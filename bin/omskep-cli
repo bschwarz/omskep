@@ -74,6 +74,10 @@ function handleCli(data = '') {
     diag.theme = opts['theme'] != null ? opts['theme'] : null;
     diag.pumlserver = opts['pumlserver'] != null ? opts['pumlserver'] : diag.pumlserver;
 
+    if (opts['bgcolor'] != null) {
+        diag.skinparam('global', `BackgroundColor ${opts['bgcolor']}`);
+    }
+
     switch(args[0]) {
         case 'sequence':
             if (!opts['resource'] || !opts['verb']) {
