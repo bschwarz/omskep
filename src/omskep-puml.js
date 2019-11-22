@@ -15,6 +15,7 @@ class Puml extends Diagram {
         this._title = null;
         this._showLegend = false;
         this.value = '';
+        this.pumlserver = 'www.plantuml.com/plantuml';
 
         if (this.doctype === 'openapi3') {
             const rest = require('./omskep-rest.js');
@@ -482,7 +483,7 @@ class Puml extends Diagram {
         }
         let pumlEncoder = require('plantuml-encoder');
 
-        return `${imgfmt}/${pumlEncoder.encode(value)}`;
+        return `https://${this.pumlserver}/${imgfmt}/${pumlEncoder.encode(value)}`;
     }
 
     /**
