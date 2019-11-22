@@ -29,7 +29,7 @@ function handleCli(data = '') {
 
     // console.dir(opts);
     // console.dir(args);
-    
+
     // special handling for -pumlurl, since it relies on plantuml-encoder package
     if ((opts['pumlurl'] != null) && (opts['pumlurl'])) {
         if (! pumlEncoder) {
@@ -112,6 +112,20 @@ function handleCli(data = '') {
 
 let args = [];
 let opts = {};
+
+//
+// check for config file option first
+//
+let idx = process.argv.indexOf('-config');
+
+if (idx > 1) {
+    let fn = process.argv[idx+1];
+    if (! fs.existsSync(fn)) {
+        console.error('Can not find the file '+ fn);
+        process.exit(1);
+    }
+    opts = JSON.parse(fs.readFileSync(fn, 'utf8'));
+}
 
 //
 // Valid cli args use cases
