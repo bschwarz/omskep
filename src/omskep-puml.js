@@ -10,7 +10,6 @@ class Puml extends Diagram {
     constructor(defn) {
         super(defn);
         this.configs = {mindmap: '', wbs: '', class: '', global: ''};
-        this._configfile = '';
         this._newStyle = false;
         this._title = null;
         this._showLegend = false;
