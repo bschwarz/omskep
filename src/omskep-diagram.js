@@ -5,8 +5,21 @@ class Diagram {
     * Ingests the API specification for use with other subclasses 
     * @param {string} defn - The API specification file (e.g. Swagger) in JSON format
     */
-    constructor(defn) {
-        this.defn = JSON.parse(defn);
+    constructor(defn, filename = null) {
+        this.filename = filename ? filename.replace(/^.*[\\\/]/, '') : '';
+        try {
+            this.defn = JSON.parse(defn);
+        } catch(e) {
+            let line = defn.split('\n').shift();
+            console.log(line);
+            if (line.split(',').length > 2) {
+                this.defn = defn;
+                this.doctype = 'csv';
+                return;
+            }
+            console.error(e);
+            return;
+        }
         if (this.defn.openapi) {
             const ver = this.defn.openapi.split('.').shift();
             if (ver === '3') {
