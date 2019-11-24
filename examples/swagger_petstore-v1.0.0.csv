@@ -1,0 +1,5 @@
+#operationId,resource,verb,request format,response format,status codes
+getPets,/pets,get,,application/json,200|default
+createPet,/pets,post,application/json,application/json,200|default
+getPet,/pets/{id},get,,application/json,200|default
+deletePet,/pets/{id},delete,,,204|default
