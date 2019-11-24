@@ -64,7 +64,7 @@ let raml = {
 
         let v = verb.toLowerCase();
 
-        if (this.defn[path][v].operationId) {
+        if (this.operationExists(path, verb) && this.defn[path][v].operationId) {
             return this.defn[path][v].operationId;
         }
 
