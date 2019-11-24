@@ -1,4 +1,5 @@
 const diag = require('./omskep-diagram.js');
+const od = require('./omskep-data.js');
 const Diagram = diag.Diagram;
 
 /** Class representing plantuml markdowns. */
@@ -7,8 +8,8 @@ class Puml extends Diagram {
     * Ingests the API specification and passes to super class to be used for diagram generation 
     * @param {string} defn - The API specification file (e.g. Swagger) in JSON format
     */
-    constructor(defn) {
-        super(defn);
+    constructor(defn, filename = null) {
+        super(defn, filename);
         this.configs = {mindmap: '', wbs: '', class: '', global: ''};
         this._newStyle = false;
         this._title = null;
@@ -17,12 +18,12 @@ class Puml extends Diagram {
         this.pumlserver = 'www.plantuml.com/plantuml';
 
         if (this.doctype === 'openapi3') {
-            const rest = require('./omskep-rest.js');
+            const rest = require('./omskep-openapi.js');
             Object.assign(Puml.prototype, rest.openapi3);
         } else if (this.doctype === 'jsonresume') {
             // this.input = 'jsonresume';
         } else if (this.doctype === 'raml') {
-            const rest = require('./omskep-rest.js');
+            const rest = require('./omskep-raml.js');
             Object.assign(Puml.prototype, rest.raml);
         } else if (this.doctype === 'cft') {
             const aws = require('./omskep-aws.js');
@@ -30,6 +31,9 @@ class Puml extends Diagram {
         } else if (this.doctype === 'arm') {
             const azure = require('./omskep-azure.js');
             Object.assign(Puml.prototype, azure.arm);
+        } else if (this.doctype === 'csv') {
+            const csv = require('./omskep-csv.js');
+            Object.assign(Puml.prototype, csv.csv);
         }
     }
     
@@ -398,20 +402,19 @@ class Puml extends Diagram {
     * @param {object} params - an object that contains the names of the elements in the sequence diagram {verb: '', url: '', client: '', gw: '', server: '', automumber: false}
     */
     sequence(params) {
+        params.resource = params.resource.replace('//', '/');
         let ret = '@startuml\n';
         let statuses = this.getStatusCodes(params.resource, params.verb);
         let opid = this.getOperationId(params.resource, params.verb);
         let code, description, media;
         let icons = '';
-        params.resource = params.resource.replace('//', '/');;
-
         if (! this.operationExists(params.resource, params.verb)) {
             // throw new Error('Operation does not exist in definition file');
             // TODO: might change this to throw an error instead of returning empty
             this.value = '';
             return this;
-        }        
-        
+        }
+
         ret += this.getTheme() +'\n\n';
         ret += Puml.httpMethodColors + '\n';
         ret += Puml.statusFunctions + '\n';
@@ -420,12 +423,13 @@ class Puml extends Diagram {
         
         if (this.showLegend) {
             ret += '\nlegend\n';
-            let sum = this.defn.paths[params.url][params.verb].summary || '';
+            //let sum = this.defn.paths[params.url][params.verb].summary || '';
+            let sum = '';
             if (sum) {
                 ret += `<b>${sum}\n\n`;
             }
             ret += '|= HTTP Status |= Reason Phrase |\n';
-            ret += statuses.map(x => x.code).sort().map(x => `| ${this.getStatusFunction(x)} | ${Diagram.statuscodes.find(y => y.code === x).reasonphrase} |`).join('\n');
+            ret += statuses.map(x => x.code).sort().map(x => `| ${this.getStatusFunction(x)} | ${od.omskepdata.statuscodes.find(y => y.code === x).reasonphrase} |`).join('\n');
             ret += '\nendlegend\n\n'
         }
         ret += this.getSeqTitle(opid) + '\n\n';
@@ -458,7 +462,7 @@ class Puml extends Diagram {
             // ret += this.defn.paths[params.path][params.verb].responses[S].description + '\n';
             ret += description + '\n';
             ret += 'G-->C: HTTP ';
-            ret += this.getStatusFunction(code) + '\\n<i><size:9>' + media.join(' || ');
+            ret += this.getStatusFunction(code) + '\\n<i><size:9>' + (typeof media === 'object' ? media.join(' || ') : media);
             ret += '\nelse ';
         }
         
