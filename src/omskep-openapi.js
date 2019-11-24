@@ -65,7 +65,7 @@ let openapi3 = {
 
         let v = verb.toLowerCase();
 
-        if (this.defn.paths[path] && this.defn.paths[path][v].operationId) {
+        if (this.operationExists(path, verb) && this.defn.paths[path][v].operationId) {
             return this.defn.paths[path][v].operationId;
         }
 
