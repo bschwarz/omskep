@@ -448,7 +448,7 @@ class Puml extends Diagram {
             ret += `participant "${icons}${params.server}" as B\n`;
         }
 
-        ret += `C->G: ${params.verb.toUpperCase()} ${params.resource}\n`;
+        ret += `C->G: ${params.verb.toUpperCase()} [[${this.getBasePath().url}${params.resource}{${this.getOpDescription(params.resource, params.verb)}} ${params.resource}]]\n`;
         ret += 'activate G\n';
         if (params.server) {
             ret += `G->B: request to API service\n`;
@@ -575,7 +575,7 @@ class Puml extends Diagram {
 /**
 * Holds the colors associated with the HTTP methods (verbs) 
 */
-Puml.httpMethodColors = Diagram.httpMethodColors.map(x => `!${x.heading} = "<color ${x.color}>${x.heading}</color>"`).join('\n');
+Puml.httpMethodColors = od.omskepdata.httpMethodColors.map(x => `!${x.heading} = "<color ${x.color}>${x.heading}</color>"`).join('\n');
 
 /**
 * Holds all of the puml functions for success, warning and failure cases
