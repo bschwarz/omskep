@@ -106,6 +106,22 @@ let raml = {
         }
 
         return ret
+    },
+    /**
+    * gets the description for an operation
+    * @param {string} path - the path segment of the resource
+    * @param {string} verb - HTTP verb of the operation
+    */
+    getOpDescription(path, verb) {
+        if (! this.operationExists(path, verb)) return '';
+
+        return this.defn[path][verb]['description'] ? this.defn[path][verb]['description'] : '';
+    },
+    /**
+    * gets base URL for the API. Will get first one if there are multiple servers specified
+    */
+    getBasePath() {
+        return this.defn.baseUri ? {url: this.defn.baseUri} : {url: ''};
     }
 }
 
