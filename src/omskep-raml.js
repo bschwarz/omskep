@@ -115,7 +115,8 @@ let raml = {
     getOpDescription(path, verb) {
         if (! this.operationExists(path, verb)) return '';
 
-        return this.defn[path][verb]['description'] ? this.defn[path][verb]['description'] : '';
+        let d = this.defn[path][verb]['description'] ? this.defn[path][verb]['description'] : '';
+        return d.length <= 30 ? d : d.substr(0,29)+'...';
     },
     /**
     * gets base URL for the API. Will get first one if there are multiple servers specified

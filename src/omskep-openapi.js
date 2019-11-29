@@ -114,7 +114,8 @@ let openapi3 = {
     getOpDescription(path, verb) {
         if (! this.operationExists(path, verb)) return '';
 
-        return this.defn.paths[path][verb]['description'] ? this.defn.paths[path][verb]['description'] : '';
+        let d = this.defn.paths[path][verb]['description'] ? this.defn.paths[path][verb]['description'] : '';
+        return d.length <= 30 ? d : d.substr(0,29)+'...';
     },
     /**
     * gets base URL for the API. Will get first one if there are multiple servers specified
