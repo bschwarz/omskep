@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Image Maps</h2>
+<p>Click on the cup of coffee to execute a JavaScript function:</p>
+
+<img src="plantuml-hyperlink.png" alt="Workplace" usemap="#plantuml-hyperlink_map" width="400" height="379">
+
+<map id="plantuml-hyperlink_map" name="plantuml-hyperlink_map">
+<area shape="rect" id="id1" href="http://plantuml.com/sequence" title="Bob tooltip" alt="" coords="295,220,323,236" onclick="myFunction()"/>
+<area shape="rect" id="id2" href="http://plantuml.com/sequence" title="Bob tooltip" alt="" coords="295,68,323,84" onclick="myFunction()"/>
+<area shape="rect" id="id3" href="#alice" title="Alice tooltip" alt="" coords="56,68,88,84" onclick="myFunction()"/>
+<area shape="rect" id="id4" href="#alice" title="Alice tooltip" alt="" coords="56,220,88,236" onclick="myFunction()"/>
+</map>
+
+<script>
+function myFunction() {
+  alert("You clicked the coffee cup!");
+}
+</script>
+
+</body>
+</html>
