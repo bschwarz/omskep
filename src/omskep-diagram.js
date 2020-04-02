@@ -34,8 +34,10 @@ class Diagram {
             this.doctype = 'cft';
         } else if (this.defn['$schema'] && this.defn['$schema'].match('azure')) {
             this.doctype = 'arm';
+        } else if (this.defn.apiVersion && (this.defn.kind || this.defn.items)) {
+            this.doctype = 'k8s';
         }
-        
+        console.log('TYPE: ' + this.doctype);
     }
 
     /**

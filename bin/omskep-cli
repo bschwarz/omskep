@@ -99,8 +99,11 @@ function handleCli(data = '') {
         case 'resumesummary':
             ret = opts['pumlurl'] ? diag.resumesummary().pumlurl(opts['pumlurl']) : diag.resumesummary().puml();
             break;
-        case 'deployment':
-            ret = opts['pumlurl'] ? diag.deployment().pumlurl(opts['pumlurl']) : diag.deployment().puml();
+        case 'azdeploy':
+            ret = opts['pumlurl'] ? diag.azDeployment().pumlurl(opts['pumlurl']) : diag.azDeployment().puml();
+            break;
+        case 'k8sdeploy':
+            ret = opts['pumlurl'] ? diag.k8sDeployment().pumlurl(opts['pumlurl']) : diag.k8sDeployment().puml();
             break;
     } 
     // console.log('DATA :' + data);

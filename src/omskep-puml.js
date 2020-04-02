@@ -31,6 +31,9 @@ class Puml extends Diagram {
         } else if (this.doctype === 'arm') {
             const azure = require('./omskep-azure.js');
             Object.assign(Puml.prototype, azure.arm);
+        } else if (this.doctype === 'k8s') {
+            const k8s = require('./omskep-k8s.js');
+            Object.assign(Puml.prototype, k8s.k8s);
         } else if (this.doctype === 'csv') {
             const csv = require('./omskep-csv.js');
             Object.assign(Puml.prototype, csv.csv);
@@ -258,8 +261,15 @@ class Puml extends Diagram {
     /**
     * Generates the deployment diagram based on a CFT file
     */
-    deployment() {
+    azDeployment() {
         this.value = this.getResources().map(x => `node \"${x.id}\\n${x.type}\"`).join('\n');
+        return this;
+    }
+    /**
+    * Generates the deployment diagram based on a CFT file
+    */
+    k8sDeployment() {
+        this.value = this.getDeployNames().map(x => `node \"${x.name}\\n${x.namespace}\"`).join('\n');
         return this;
     }
 
@@ -268,7 +278,7 @@ class Puml extends Diagram {
     * @param {boolean} versionSeparate - should the version be in a separate node (true)? Or concatenated with API name (false)?
     */
     wbs(versionSeparate = false) {
-        let indent = 3;
+        let indent;
         let ret = '@startwbs' + '\n';
         const star = "+";
 
