@@ -273,6 +273,7 @@ class Puml extends Diagram {
     */
     k8sDeployment() {
         let ret = '@startuml' + '\n';
+        let ns = this.getNamespace();
         // if (this.theme) {
         //     ret += '!include ' + this.theme + '\n';
         // }
@@ -280,17 +281,29 @@ class Puml extends Diagram {
         ret += '!include <kubernetes/k8s-sprites-labeled-25pct>\n';
         ret += this.skinparam('global');
         ret += this.skinparam('class');
-        if (this.title) {
-            ret += `title ${this.defn.info.title} ${this.defn.info.version}\n`;
+        //
+        // explicitly check for empty string
+        // since that will signal the use of title
+        // but using the default title instead of a user
+        // defined one
+        //
+        if (this.title === '') {
+            ret += `title Deployment: ${ns}\n`;
         }
-        ret += `frame "<size:16>${this.getNamespace()}" as ns  {\n`;
+        ret += `frame "<size:16>${ns}" as ns  {\n`;
         let cnt = 1;
+        //
+        // Loop through each of the deployments. There might 
+        // be multiple deploys in a file.
+        //
         for (const deploy of this.getDeployInfo()) {
             ret += `frame "<$deploy>\\n<size:12>${deploy.name}" as deploy${cnt} {\n`;
             ret += `    node "<$node>" as node${cnt} {\n`;
             let reps = deploy.replicas;
             for (let i = 1; i <= reps; i++) {
-                ret += `        component "<$pod>\\nPod 1\\n8002" as pod${cnt}_${i}\n`;                
+                ret += `        storage "<$pod>\\nPod ${i}" as pod${cnt}_${i} {\n`;            
+                ret += `            component "8002" as comp${cnt}_${i}\n`;            
+                ret += `        }\n`;            
             }
             ret += '\n    }';
             ret += '\n}\n';
