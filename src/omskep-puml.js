@@ -157,7 +157,10 @@ class Puml extends Diagram {
     * Determines the theme to use
     */
     getTheme() {
-        let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 'superhero-outline', 'hacker', 'resume-light'];
+        let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 
+        'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 
+        'superhero-outline', 'hacker', 'resume-light', 'bluegray', 
+        'silver', 'black-knight', 'lightgray', 'metal'];
         let ret = '!include ';
         if (!this.theme) return '';
 
@@ -266,10 +269,37 @@ class Puml extends Diagram {
         return this;
     }
     /**
-    * Generates the deployment diagram based on a CFT file
+    * Generates the deployment diagram based on a deploy file
     */
     k8sDeployment() {
-        this.value = this.getDeployNames().map(x => `node \"${x.name}\\n${x.namespace}\"`).join('\n');
+        let ret = '@startuml' + '\n';
+        // if (this.theme) {
+        //     ret += '!include ' + this.theme + '\n';
+        // }
+        ret += this.getTheme() +'\n\n';
+        ret += '!include <kubernetes/k8s-sprites-labeled-25pct>\n';
+        ret += this.skinparam('global');
+        ret += this.skinparam('class');
+        if (this.title) {
+            ret += `title ${this.defn.info.title} ${this.defn.info.version}\n`;
+        }
+        ret += `frame "<size:16>${this.getNamespace()}" as ns  {\n`;
+        let cnt = 1;
+        for (const deploy of this.getDeployInfo()) {
+            ret += `frame "<$deploy>\\n<size:12>${deploy.name}" as deploy${cnt} {\n`;
+            ret += `    node "<$node>" as node${cnt} {\n`;
+            let reps = deploy.replicas;
+            for (let i = 1; i <= reps; i++) {
+                ret += `        component "<$pod>\\nPod 1\\n8002" as pod${cnt}_${i}\n`;                
+            }
+            ret += '\n    }';
+            ret += '\n}\n';
+            cnt += 1;
+        }
+        
+        ret += '}';
+        ret += '\n@enduml';
+        this.value = ret;
         return this;
     }
 
