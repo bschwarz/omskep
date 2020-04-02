@@ -11,7 +11,6 @@ class Diagram {
             this.defn = JSON.parse(defn);
         } catch(e) {
             let line = defn.split('\n').shift();
-            console.log(line);
             if (line.split(',').length > 2) {
                 this.defn = defn;
                 this.doctype = 'csv';
@@ -37,7 +36,6 @@ class Diagram {
         } else if (this.defn.apiVersion && (this.defn.kind || this.defn.items)) {
             this.doctype = 'k8s';
         }
-        console.log('TYPE: ' + this.doctype);
     }
 
     /**
