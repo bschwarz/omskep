@@ -274,9 +274,7 @@ class Puml extends Diagram {
     k8sDeployment() {
         let ret = '@startuml' + '\n';
         let ns = this.getNamespace();
-        // if (this.theme) {
-        //     ret += '!include ' + this.theme + '\n';
-        // }
+
         ret += this.getTheme() +'\n\n';
         ret += '!include <kubernetes/k8s-sprites-labeled-25pct>\n';
         ret += this.skinparam('global');
@@ -297,21 +295,20 @@ class Puml extends Diagram {
         // be multiple deploys in a file.
         //
         for (const deploy of this.getDeployInfo()) {
-            ret += `frame "<$deploy>\\n<size:12>${deploy.name}" as deploy${cnt} {\n`;
+            let labels = Object.entries(deploy.labels).map(x => (`${x[0]}: ${x[1]}`)).join('\\n<size:10>');
+            ret += `rectangle "<size:14>${deploy.name}\\n<$deploy>\\n<size:10>${labels}\\n" as deploy${cnt} {\n`;
             ret += `    node "<$node>" as node${cnt} {\n`;
             let reps = deploy.replicas;
+            ret += `        rectangle "<$rs>" as rs${cnt} {\n`;
             for (let i = 1; i <= reps; i++) {
-                ret += `        storage "<$pod>\\nPod ${i}" as pod${cnt}_${i} {\n`;            
-                ret += `            component "8002" as comp${cnt}_${i}\n`;            
+                ret += `        component "<$pod>\\nPod ${i}" as pod${cnt}_${i} {\n`;            
+                ret += `            storage "<size:10>port: ${deploy.portnum}" as comp${cnt}_${i}\n`;            
                 ret += `        }\n`;            
             }
-            ret += '\n    }';
-            ret += '\n}\n';
+            ret += '\n    }\n}\n}\n';
             cnt += 1;
-        }
-        
-        ret += '}';
-        ret += '\n@enduml';
+        }        
+        ret += '}\n@enduml';
         this.value = ret;
         return this;
     }
