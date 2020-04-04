@@ -19,6 +19,11 @@ class Diagram {
             console.error(e);
             return;
         }
+        //
+        // Determine what kind of file it is. Will base
+        // the decision on how the file format is defined
+        // relying on unique fields within the file
+        //
         if (this.defn.openapi) {
             const ver = this.defn.openapi.split('.').shift();
             if (ver === '3') {
@@ -33,8 +38,13 @@ class Diagram {
             this.doctype = 'cft';
         } else if (this.defn['$schema'] && this.defn['$schema'].match('azure')) {
             this.doctype = 'arm';
-        } else if (this.defn.apiVersion && (this.defn.kind || this.defn.items)) {
-            this.doctype = 'k8s';
+        } else if (this.defn.apiVersion && this.defn.kind) {
+            let obj = (this.defn.kind === 'List') ? this.defn.items[0] : this.defn;
+            if (obj.kind === 'Service') {
+                this.doctype = 'k8sservice';
+            } else if (obj.kind === 'Deployment') {
+                this.doctype = 'k8sdeploy';
+            }
         }
     }
 

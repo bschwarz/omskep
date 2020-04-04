@@ -31,7 +31,7 @@ class Puml extends Diagram {
         } else if (this.doctype === 'arm') {
             const azure = require('./omskep-azure.js');
             Object.assign(Puml.prototype, azure.arm);
-        } else if (this.doctype === 'k8s') {
+        } else if ((this.doctype === 'k8sservice') || (this.doctype === 'k8sdeploy')) {
             const k8s = require('./omskep-k8s.js');
             Object.assign(Puml.prototype, k8s.k8s);
         } else if (this.doctype === 'csv') {
@@ -278,7 +278,6 @@ class Puml extends Diagram {
         ret += this.getTheme() +'\n\n';
         ret += '!include <kubernetes/k8s-sprites-labeled-25pct>\n';
         ret += this.skinparam('global');
-        ret += this.skinparam('class');
         //
         // explicitly check for empty string
         // since that will signal the use of title
@@ -286,7 +285,7 @@ class Puml extends Diagram {
         // defined one
         //
         if (this.title === '') {
-            ret += `title Deployment: ${ns}\n`;
+            ret += `title Deployments for ${ns}\n`;
         }
         ret += `frame "<size:16>${ns}" as ns  {\n`;
         let cnt = 1;
@@ -296,7 +295,7 @@ class Puml extends Diagram {
         //
         for (const deploy of this.getDeployInfo()) {
             let labels = Object.entries(deploy.labels).map(x => (`${x[0]}: ${x[1]}`)).join('\\n<size:10>');
-            ret += `rectangle "<size:14>${deploy.name}\\n<$deploy>\\n<size:10>${labels}\\n" as deploy${cnt} {\n`;
+            ret += `rectangle "<$deploy>\\n<size:14>${deploy.name}\\n<size:10>${labels}\\n" as deploy${cnt} {\n`;
             ret += `    node "<$node>" as node${cnt} {\n`;
             let reps = deploy.replicas;
             ret += `        rectangle "<$rs>" as rs${cnt} {\n`;
@@ -312,7 +311,61 @@ class Puml extends Diagram {
         this.value = ret;
         return this;
     }
+    
+    /**
+    * Generates the service diagram based on a deploy file
+    */
+    k8sService() {
+        let poststr = [];
+        let prestr = [];
+        let ret = '';
+        let ns = this.getNamespace();
 
+        ret += this.getTheme() +'\n\n';
+        ret += '!include <kubernetes/k8s-sprites-labeled-25pct>\n';
+        // ret += 'left to right direction\n';
+        ret += 'top to bottom direction\n';
+        ret += this.skinparam('global');
+        //
+        // explicitly check for empty string
+        // since that will signal the use of title
+        // but using the default title instead of a user
+        // defined one
+        //
+        if (this.title === '') {
+            ret += `title Services for ${ns}\n`;
+        }
+        // ret += 'interface external\n'
+        ret += `frame "<size:16>${ns}" as ns  {\n`;
+        let cnt = 1;
+        // prestr.push(`interface external as int`);
+        //
+        // Loop through each of the services. There might 
+        // be multiple services in a file.
+        //
+        for (const svc of this.getServiceInfo()) {
+            
+            let labels = Object.entries(svc.labels).map(x => (`${x[0]}: ${x[1]}`)).join('\\n<size:10>');
+            ret += `rectangle "<$svc>\\n<size:14>${svc.name}\\n<size:10>${labels}\\n" as svc${cnt} {\n`;
+            ret += `    card "port: ${svc.ports[0].port || 'undefined'}" as card${cnt}_1\n`;
+            ret += `    card "nodePort: ${svc.ports[0].nodePort || 'undefined'}" as card${cnt}_2\n`;
+            ret += ` }\n`;
+            ret += `    node "<$node>" as node${cnt} {\n`;
+            // ret += `        rectangle "<$rs>" as rs${cnt} {\n`;
+            // ret += `            component "<$pod>\\nPod" as pod${cnt} {\n`;            
+            // ret += `                storage "<size:10>port: ${svc.ports[0].targetPort || ''}" as comp${cnt}\n`;            
+            // ret += `            }\n`;            
+            ret += '\n    \n}\n';
+            // prestr.push(`interface external as int${cnt}`);
+            // poststr.push(`int${cnt} -- svc${cnt} : <size:10>nodePort\\n<size:10>${svc.ports[0].nodePort || ''}`);
+            poststr.push(`node${cnt} -- svc${cnt} : <size:10>port\\n<size:10>${svc.ports[0].port || ''}`);
+            cnt += 1;
+        }
+        
+        // ret += '}\n@enduml';
+        this.value = `@startuml\n${prestr.join('\n')}\n${ret}\n${poststr.join('\n')}\n}\n@enduml`;
+        return this;
+    }
     /**
     * Generates the wbs markdown, include start/end tags and any configs
     * @param {boolean} versionSeparate - should the version be in a separate node (true)? Or concatenated with API name (false)?
