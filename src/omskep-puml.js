@@ -118,15 +118,16 @@ class Puml extends Diagram {
     skinparam(type, param = '') {
         if (param === '') {
             let ret = '';
+            if (! this.configs[type]) {
+                return ret;
+            }
             if (this.newStyle) {
                 ret += (type === 'global') ? 'skinparam ' : ((type==='mindmap' || type==='wbs') ? '<style>\n '+type+'Diagram' :  'skinparam '+type);
             } else {
                 ret += (type === 'global') ? 'skinparam ' : ((type==='mindmap' || type==='wbs') ? 'style '+type+'Diagram' :  'skinparam '+type);
             }
-            ret += ' {\n' + (this.configs[type] ? this.configs[type] : '' );
-            ret += '\n}\n';
+            ret += ' {\n' + this.configs[type] + '\n}\n';
             ret += (type=== 'wbs' || type==='mindmap') ? (this.newStyle ? '</style>\n' : '') : '';
-
             return ret;
         } else {
             this.configs[type] += param + '\n';
