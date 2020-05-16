@@ -243,6 +243,7 @@ class Puml extends Diagram {
         // SKILLS
         ret += star.repeat(2) + ' Skills' + '\n';
         let tcnt = 0;
+        let cnt = 0;
         for (let E of resume.skills) {
             // ret += star.repeat(3) + ' <b>' + E.name + '\\n' + E.level +'\n';
             // ret += star.repeat(3) + ' <b>' + E.name +'\n';
@@ -254,6 +255,12 @@ class Puml extends Diagram {
                 ret += star.repeat(4) + (cnt%2 ? left+' ' : right+' ') + K +'\n';
                 cnt++;
             }
+        }
+        // Also add Languages to Skills
+        ret += star.repeat(3) + (tcnt%2 ? left+' <b>' : right+' <b>') + 'Langauges\n';
+        for (let L of resume.languages) {
+            ret += star.repeat(4) + (cnt%2 ? left+' ' : right+' ') + L.language+'\\n'+L.fluency +'\n';
+            cnt++;
         }
 
         ret += '@end'+type;
