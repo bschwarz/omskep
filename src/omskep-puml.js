@@ -195,9 +195,7 @@ class Puml extends Diagram {
 
         indent = versionSeparate ? 3 : 2;
 
-        if (this.theme != '') {
-            ret += '!include ' + this.theme + '\n';
-        }
+        ret += this.getTheme() + '\n\n';
         ret += Puml.httpMethodColors + '\n';
         ret += this.skinparam('global');
         ret += this.skinparam('mindmap');
@@ -395,9 +393,7 @@ class Puml extends Diagram {
 
         indent = versionSeparate ? 3 : 2;
 
-        if (this.theme != '') {
-            ret += '!include ' + this.theme + '\n';
-        }
+        ret += this.getTheme() + '\n\n';
         ret += this.skinparam('global');
         ret += this.skinparam('wbs');
         if (this.title) {
@@ -422,9 +418,8 @@ class Puml extends Diagram {
     class() {
         let classData = this.classItems();
         let ret = '@startuml' + '\n';
-        if (this.theme != '') {
-            ret += '!include ' + this.theme + '\n';
-        }
+
+        ret += this.getTheme() + '\n\n';
         ret += Puml.httpMethodColors + '\n';
         ret += 'hide empty members\n';
         ret += this.skinparam('global');
@@ -434,7 +429,7 @@ class Puml extends Diagram {
         }
 
         ret += 'interface "HTTP/1.1" as HTTP {\n';
-        ret += Diagram.httpMethods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
+        ret += Puml.httpMethods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
         ret += 'interface "' + this.defn.info.title + '/' + this.defn.info.version + '" as _api_ << (A, orange) >> {\n';
         ret += this.getAllHttpMethods().map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
 
@@ -690,6 +685,12 @@ class Puml extends Diagram {
         return str.replace(re, (matched) => {
             return map[matched.toLowerCase()];
         });
+    }
+    /**
+    * Getter that returns the avaiable HTTP methods
+    */
+    static get httpMethods() {
+        return od.omskepdata.httpMethodColors.map(x => x.name);
     }
 }
 
