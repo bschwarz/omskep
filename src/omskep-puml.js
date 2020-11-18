@@ -14,6 +14,7 @@ class Puml extends Diagram {
         this._newStyle = false;
         this._title = null;
         this._showLegend = false;
+        this._theme = null;
         this.value = '';
         this.pumlserver = 'www.plantuml.com/plantuml';
         //
@@ -47,13 +48,46 @@ class Puml extends Diagram {
     * Getter that gets the config file (!include file)
     */
     get theme() {
-        return this._configfile;
+        //
+        // These are the available themes at puml-themes
+        //
+        let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 
+        'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 
+        'superhero-outline', 'hacker', 'resume-light', 'bluegray', 
+        'silver', 'black-knight', 'lightgray', 'metal', 'sketchy-outline',
+        'sketchy', 'spacelab', 'minty', 'sandstone', 'united'];
+        let ret = '!include ';
+        if (!this._theme) return '';
+        //
+        // Check if the theme exists, and if it does then add the inlcude url
+        // for the puml markup
+        //
+        if (pumlthemes.includes(this._theme)) {
+            ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this._theme}/puml-theme-${this._theme}.puml`;
+        } else {
+            ret += this._theme;
+        }
+        
+        return ret;
     }
 
     /**
     * Setter that sets the config file (!include file)
     */
     set theme(file) {
+        this._theme = file;
+    }
+    /**
+    * Getter that gets the config file (!include file)
+    */
+    get configfile() {
+        return this._configfile;
+    }
+
+    /**
+    * Setter that sets the config file (!include file)
+    */
+    set configfile(file) {
         this._configfile = file;
     }
 
@@ -195,7 +229,7 @@ class Puml extends Diagram {
 
         indent = versionSeparate ? 3 : 2;
 
-        ret += this.getTheme() + '\n\n';
+        ret += this.theme + '\n\n';
         ret += Puml.httpMethodColors + '\n';
         ret += this.skinparam('global');
         ret += this.skinparam('mindmap');
@@ -230,7 +264,7 @@ class Puml extends Diagram {
         let t2 = `title ${this.defn.basics.name}\\n${this.defn.basics.label}`;
         let t3 = '';
 
-        ret += this.getTheme() +'\n\n';
+        ret += this.theme +'\n\n';
         ret += this.skinparam('global');
         ret += this.skinparam(type);
         
@@ -291,7 +325,7 @@ class Puml extends Diagram {
         let ret = '@startuml' + '\n';
         let ns = this.getNamespace();
 
-        ret += this.getTheme() +'\n\n';
+        ret += this.theme +'\n\n';
         ret += '!include <kubernetes/k8s-sprites-labeled-25pct>\n';
         ret += this.skinparam('global');
         //
@@ -337,7 +371,7 @@ class Puml extends Diagram {
         let ret = '';
         let ns = this.getNamespace();
 
-        ret += this.getTheme() +'\n\n';
+        ret += this.theme +'\n\n';
         ret += '!include <kubernetes/k8s-sprites-labeled-25pct>\n';
         // ret += 'left to right direction\n';
         ret += 'top to bottom direction\n';
@@ -393,7 +427,7 @@ class Puml extends Diagram {
 
         indent = versionSeparate ? 3 : 2;
 
-        ret += this.getTheme() + '\n\n';
+        ret += this.theme + '\n\n';
         ret += this.skinparam('global');
         ret += this.skinparam('wbs');
         if (this.title) {
@@ -419,7 +453,7 @@ class Puml extends Diagram {
         let classData = this.classItems();
         let ret = '@startuml' + '\n';
 
-        ret += this.getTheme() + '\n\n';
+        ret += this.theme + '\n\n';
         ret += Puml.httpMethodColors + '\n';
         ret += 'hide empty members\n';
         ret += this.skinparam('global');
@@ -531,7 +565,7 @@ class Puml extends Diagram {
             return this;
         }
 
-        ret += this.getTheme() +'\n\n';
+        ret += this.theme +'\n\n';
         ret += Puml.httpMethodColors + '\n';
         ret += Puml.statusFunctions + '\n';
         ret += this.skinparam('global');
