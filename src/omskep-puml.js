@@ -17,31 +17,21 @@ class Puml extends Diagram {
         this._theme = null;
         this.value = '';
         this.pumlserver = 'www.plantuml.com/plantuml';
-        //
-        // Determine what type of input file that is going
-        // to be processed.
-        //
-        if (this.doctype === 'openapi3') {
-            const rest = require('./omskep-openapi.js');
-            Object.assign(Puml.prototype, rest.openapi3);
-        } else if (this.doctype === 'jsonresume') {
-            // this.input = 'jsonresume';
-        } else if (this.doctype === 'raml') {
-            const rest = require('./omskep-raml.js');
-            Object.assign(Puml.prototype, rest.raml);
-        } else if (this.doctype === 'cft') {
-            const aws = require('./omskep-aws.js');
-            Object.assign(Puml.prototype, aws.cft);
-        } else if (this.doctype === 'arm') {
-            const azure = require('./omskep-azure.js');
-            Object.assign(Puml.prototype, azure.arm);
-        } else if ((this.doctype === 'k8sservice') || (this.doctype === 'k8sdeploy')) {
-            const k8s = require('./omskep-k8s.js');
-            Object.assign(Puml.prototype, k8s.k8s);
-        } else if (this.doctype === 'csv') {
-            const csv = require('./omskep-csv.js');
-            Object.assign(Puml.prototype, csv.csv);
+        let doctypeMap = {'openapi3': {'file': 'omskep-openapi', 'entry': 'openapi3'},
+                          'jsonresume': {'file': '', 'entry': ''},
+                          'raml': {'file': 'omskep-raml', 'entry': 'raml'},
+                          'cft': {'file': 'omskep-aws', 'entry': 'cft'},
+                          'arm': {'arm': 'omskep-arm', 'entry': 'arm'},
+                          'k8sservice': {'arm': 'omskep-k8s', 'entry': 'k8s'},
+                          'k8sdeploy': {'arm': 'omskep-k8s', 'entry': 'k8s'},
+                          'csv': {'arm': 'omskep-csv', 'entry': 'csv'},
+        };
+        if (!Object.keys(doctypeMap).includes(this.doctype)) {
+            console.error(`Error: doctype ${this.doctype} is not recognized as a valid type`)
         }
+        const dt = doctypeMap[this.doctype];
+        const rest = require(`./${dt.file}.js`);
+        Object.assign(Puml.prototype, rest[dt.entry]);
     }
     
     /**
