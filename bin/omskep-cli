@@ -19,7 +19,7 @@ let Puml = puml.Puml;
 let data = '';
 
 /**
-* processes args and data to determine the output
+* description - processes args and data to determine the output
 * @param {string} data - data of the input file or from pipe
 */
 function handleCli(data = '') {
@@ -31,25 +31,25 @@ function handleCli(data = '') {
     // console.dir(opts);
     // console.dir(args);
 
+    //
     // special handling for -pumlurl, since it relies on plantuml-encoder package
-    if ((opts['pumlurl'] != null) && (opts['pumlurl'])) {
+    //
+    if ((opts.pumlurl != null) && (opts.pumlurl)) {
         if (! pumlEncoder) {
             console.error('Please install "plantuml-encoder" to use -pumlurl option');
             process.exit(1);
         }
     }
-
     //
     // There is a weird behavior on windows using emulation (i.e. git bash), if the value to the -resource
     // argument begins with a /, then windows expands that to the current working directory
     // Work arround is to prepend // to the path. Here we check if // is prepend and windows
     //
-    if ((opts['resource']) && (process.platform === 'win32') && (opts['resource'].match('C:/'))) {
+    if ((opts.resource) && (process.platform === 'win32') && (opts.resource.match('C:/'))) {
         console.log(opts['resource']);
         console.error('For windows CLI, you must prepend the value to the "resource" argument with "//" instead of just "/"');
         process.exit(1);
     }
-
     //
     // If no data, then a filename was given on cli instead of pipe
     //
@@ -59,54 +59,57 @@ function handleCli(data = '') {
             process.exit(1);
         }
         if (! fs.existsSync(args[1])) {
-            console.error('Can not find the file '+ args[1]);
+            console.error(`Can not find the file ${args[1]}`);
             process.exit(1);
         }
         filename = args[1];
         data = fs.readFileSync(args[1], 'utf8');
     }
-
     //
     // For now, assume only puml diagrams, but in future have a flag if it is some
     // other diagram (i.e. mermaid, dc3, etc)
     //
     diag = new Puml(data, filename);
-    diag.title = opts['title'] != null ? opts['title'] : null;
-    diag.theme = opts['theme'] != null ? opts['theme'] : null;
-    diag.pumlserver = opts['pumlserver'] != null ? opts['pumlserver'] : diag.pumlserver;
-
+    diag.title = opts.title || null;
+    diag.theme = opts.theme || null;
+    diag.pumlserver = opts.pumlserver || diag.pumlserver;
+    //
+    // Can pass in background color for the diagram that gets generated
+    //
     if (opts['bgcolor'] != null) {
         diag.skinparam('global', `BackgroundColor ${opts['bgcolor']}`);
     }
-
+    //
+    // Take action based on the type of diagrams passed in (args[0])
+    //
     switch(args[0]) {
         case 'sequence':
-            if (!opts['resource'] || !opts['verb']) {
+            if (!opts.resource || !opts.verb) {
                 console.error('Error: Sequence diagrams need the -path and -verb options specified.');
                 process.exit(1);
             }
-            ret = opts['pumlurl'] ? diag.sequence(opts).pumlurl(opts['pumlurl']) : diag.sequence(opts).puml();
+            ret = opts.pumlurl ? diag.sequence(opts).pumlurl(opts.pumlurl) : diag.sequence(opts).puml();
             break;
         case 'class':
-            ret = opts['pumlurl'] ? diag.class().pumlurl(opts['pumlurl']) : diag.class().puml();
+            ret = opts.pumlurl ? diag.class().pumlurl(opts.pumlurl) : diag.class().puml();
             break;
         case 'wbs':
-            ret = opts['pumlurl'] ? diag.wbs().pumlurl(opts['pumlurl']) : diag.wbs().puml();
+            ret = opts.pumlurl ? diag.wbs().pumlurl(opts.pumlurl) : diag.wbs().puml();
             break;
         case 'mindmap':
-            ret = opts['pumlurl'] ? diag.mindmap().pumlurl(opts['pumlurl']) : diag.mindmap().puml();
+            ret = opts.pumlurl ? diag.mindmap().pumlurl(opts.pumlurl) : diag.mindmap().puml();
             break;
         case 'resume-summary':
-            ret = opts['pumlurl'] ? diag.resumesummary().pumlurl(opts['pumlurl']) : diag.resumesummary().puml();
+            ret = opts.pumlurl ? diag.resumesummary().pumlurl(opts.pumlurl) : diag.resumesummary().puml();
             break;
         case 'az-deploy':
-            ret = opts['pumlurl'] ? diag.azDeployment().pumlurl(opts['pumlurl']) : diag.azDeployment().puml();
+            ret = opts.pumlurl ? diag.azDeployment().pumlurl(opts.pumlurl) : diag.azDeployment().puml();
             break;
         case 'k8s-deploy':
-            ret = opts['pumlurl'] ? diag.k8sDeployment().pumlurl(opts['pumlurl']) : diag.k8sDeployment().puml();
+            ret = opts.pumlurl ? diag.k8sDeployment().pumlurl(opts.pumlurl) : diag.k8sDeployment().puml();
             break;
         case 'k8s-service':
-            ret = opts['pumlurl'] ? diag.k8sService().pumlurl(opts['pumlurl']) : diag.k8sService().puml();
+            ret = opts.pumlurl ? diag.k8sService().pumlurl(opts.pumlurl) : diag.k8sService().puml();
             break;
     } 
     // console.log('DATA :' + data);
@@ -117,14 +120,17 @@ function handleCli(data = '') {
     return ret;
 }
 
+//
+//   MAIN
+//
 let args = [];
 let opts = {};
-
 //
-// check for config file option first
+// check for config file option first. We will read in any
+// config options stored locally first, and then apply any
+// command line options afterwards.
 //
 let idx = process.argv.indexOf('-config');
-
 if (idx > 1) {
     let fn = process.argv[idx+1];
     if (! fs.existsSync(fn)) {
@@ -133,7 +139,6 @@ if (idx > 1) {
     }
     opts = JSON.parse(fs.readFileSync(fn, 'utf8'));
 }
-
 //
 // Valid cli args use cases
 //   omskep <diagram> <filename>
@@ -158,7 +163,7 @@ for (let index = 2; index < process.argv.length; index++) {
 // console.log(opts);
 
 //
-// Figure out if the CLI is called correctly, and if a file is supplied or piped to command
+// Figure out if the CLI is called correctly, and if a file is supplied or piped (|) to command
 //
 // Note: there might be cases when the TTY check might not really work, if it is run
 // in an environment that is not attached to a TTY, and the invocation is incorrect
@@ -183,7 +188,4 @@ if ((args.length < 1) || ((args.length < 2) && (process.stdin.isTTY))) {
     // data = fs.readFileSync(process.argv[3], 'utf8');
     console.log(handleCli(''));
 }
-
-// const plantumlEncoder = require('plantuml-encoder');
-
 
