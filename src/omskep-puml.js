@@ -16,7 +16,10 @@ class Puml extends Diagram {
         this._showLegend = false;
         this.value = '';
         this.pumlserver = 'www.plantuml.com/plantuml';
-
+        //
+        // Determine what type of input file that is going
+        // to be processed.
+        //
         if (this.doctype === 'openapi3') {
             const rest = require('./omskep-openapi.js');
             Object.assign(Puml.prototype, rest.openapi3);
@@ -158,13 +161,20 @@ class Puml extends Diagram {
     * Determines the theme to use
     */
     getTheme() {
+        //
+        // These are the available themes at puml-themes
+        //
         let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 
         'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 
         'superhero-outline', 'hacker', 'resume-light', 'bluegray', 
-        'silver', 'black-knight', 'lightgray', 'metal'];
+        'silver', 'black-knight', 'lightgray', 'metal', 'sketchy-outline',
+        'sketchy', 'spacelab', 'minty', 'sandstone', 'united'];
         let ret = '!include ';
         if (!this.theme) return '';
-
+        //
+        // Check if the theme exists, and if it does then add the inlcude url
+        // for the puml markup
+        //
         if (pumlthemes.includes(this.theme)) {
             ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this.theme}/puml-theme-${this.theme}.puml`;
         } else {
