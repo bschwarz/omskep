@@ -12,7 +12,7 @@ class Puml extends Diagram {
         super(defn, filename);
         this.configs = {mindmap: '', wbs: '', class: '', global: ''};
         this._newStyle = false;
-        this._title = null;
+        this._title = false;
         this._showLegend = false;
         this._theme = null;
         this.value = '';
