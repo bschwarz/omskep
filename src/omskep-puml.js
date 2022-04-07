@@ -17,6 +17,7 @@ class Puml extends Diagram {
         this._showLegend = false;
         this._theme = null;
         this.value = '';
+        this._httpMethods = ['get', 'post', 'put', 'delete', 'patch', 'head'];
         this.pumlserver = 'www.plantuml.com/plantuml';
         let doctypeMap = {'openapi3': {'file': 'omskep-openapi', 'entry': 'openapi3'},
                           'jsonresume': {'file': '', 'entry': ''},
@@ -34,7 +35,20 @@ class Puml extends Diagram {
         const rest = require(`./${dt.file}.js`);
         Object.assign(Puml.prototype, rest[dt.entry]);
     }
-    
+    /**
+    * Retrieve the HTTP methods list
+    * @returns (Array) - an array of HTTP methods
+    */
+     get httpMethods() {
+        return this._httpMethods;
+    }
+    /**
+    * Sets the httpMethods
+    * @param (array) value - array of HTTP methods to use in other methods
+    */
+    set httpMethods(methods) {
+        this._httpMethods = methods;
+    }
     /**
     * Getter that gets the config file (!include file)
     */
@@ -423,21 +437,21 @@ class Puml extends Diagram {
         ret += this.skinparam('global');
         ret += this.skinparam('class');
         if (this.title) {
-            ret += `title ${this.defn.info.title} ${this.defn.info.version}\n`;
+            ret += `title ${this.getTitle()} ${this.getVersion()}\n`;
         }
 
         ret += 'interface " HTTP/1.1" as HTTP {\n';
         ret += Puml.httpMethods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
-        ret += `interface " ${this.defn.info.title} ${this.defn.info.version}" as _api_  << (A, orange) >> {\n`;
+        ret += `interface " ${this.getTitle()} ${this.getVersion()}" as _api_  << (A, orange) >> {\n`;
         ret += this.getAllHttpMethods().map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
 
         for (let C of classData.classes) {
-            ret += `class " ${C.name.resource}" as ${C.name.rpath} << (R, orange) >> {\n`;
+            ret += `class " ${C.name.resource}" as ${C.name.alias} << (R, orange) >> {\n`;
             ret += C.methods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
             for (let M of C.methods) {
-                ret += `class " ${M.toUpperCase()} ${C.name.resource}" as ${M}-${C.name.rpath} {\n`;
+                ret += `class " ${M.toUpperCase()} ${C.name.resource}" as ${M}-${C.name.alias} {\n`;
                 ret += '}\n';
-                classData.paths.push(`"${C.name.rpath}" o-- "${M}-${C.name.rpath}"`);
+                classData.paths.push(`"${C.name.alias}" o-- "${M}-${C.name.alias}"`);
             }
         }
 
@@ -457,7 +471,7 @@ class Puml extends Diagram {
         let pstr = '/';
         let cnt = 0;
         let ret = {classes: [], paths: []};
-        let prev = 'api';
+        let prev = '_api_';
         let given_paths = this.getPaths(this.defn.paths);
 
         //
@@ -465,52 +479,12 @@ class Puml extends Diagram {
         // were sorted from the getPaths function
         //
         for (let P of given_paths) {
-
-            cnt++;
-            pstr = '/';
-            prev = '_api_';
-            let segs = P.replace(/^\/+|\/+$/g, '').split(/[\/]/); // removes begin and end slashes and then splits
-            //
-            // loop over each path segment, since puml needs every
-            // path segment accounted for in the tree
-            //
-            for (let S = 0; S < segs.length; S++) {
-                let obj = {};
-                pstr += segs[S].replace(/\{|\}/g, '_')+'/';
-                        // console.log('SEG: ' + pstr);
-
-                //
-                // If the path was already processed, or if it's already
-                // in the paths from the swagger file, then do not process
-                // since it was either already processed, or will be 
-                // processed
-                //
-                if (paths.includes(pstr) || given_paths.includes(pstr) ) {
-                    continue;
-                }
-                paths.push(pstr);
-
-                obj.name = {resource: P, rpath: pstr};
-                obj.methods = [];
-                if (prev === '_api_') {
-                    ret.paths.push('"' + prev + '" o-- "' + pstr + '"');
-                } else {
-                    ret.paths.push('"' + prev + '" <-- "' + pstr + '"');
-                }
-                
-                prev = pstr;
-                //
-                // If this is the last path segment, then we get
-                // the HTTP methods assigned to this path
-                //
-                if (S === segs.length-1) {
-                    // str += "_";
-                    obj.methods = Object.keys(this.defn.paths[P]);
-                }
-
-                ret.classes.push(obj);
-            }
-            
+            let obj = {};
+            let alias = P.replace(/\{|\}/g, '_');
+            obj.name = {resource: P, alias: alias};
+            obj.methods = Object.keys(this.defn.paths[P]);
+            ret.classes.push(obj);
+            ret.paths.push('"' + prev + '" <-- "' + alias + '"');
         }
 
         return ret;
