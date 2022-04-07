@@ -41,7 +41,7 @@ class Puml extends Diagram {
         //
         // These are the available themes at puml-themes
         //
-        let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 
+        let pumlthemes = ['aws-orange', 'cerulean', 'cerulean-outline', 'materia', 
         'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 
         'superhero-outline', 'hacker', 'resume-light', 'bluegray', 
         'silver', 'black-knight', 'lightgray', 'metal', 'sketchy-outline',
@@ -62,7 +62,7 @@ class Puml extends Diagram {
     }
 
     /**
-    * Setter that sets the config file (!include file)
+    * Setter that sets the theme to use
     */
     set theme(file) {
         this._theme = file;
@@ -188,7 +188,7 @@ class Puml extends Diagram {
         //
         // These are the available themes at puml-themes
         //
-        let pumlthemes = ['cerulean', 'cerulean-outline', 'materia', 
+        let pumlthemes = ['aws-orange', 'cerulean', 'cerulean-outline', 'materia', 
         'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 
         'superhero-outline', 'hacker', 'resume-light', 'bluegray', 
         'silver', 'black-knight', 'lightgray', 'metal', 'sketchy-outline',
@@ -452,14 +452,19 @@ class Puml extends Diagram {
             ret += `title ${this.defn.info.title} ${this.defn.info.version}\n`;
         }
 
-        ret += 'interface "HTTP/1.1" as HTTP {\n';
+        ret += 'interface " HTTP/1.1" as HTTP {\n';
         ret += Puml.httpMethods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
-        ret += 'interface "' + this.defn.info.title + '/' + this.defn.info.version + '" as _api_ << (A, orange) >> {\n';
+        ret += `interface " ${this.defn.info.title} ${this.defn.info.version}" as _api_  << (A, orange) >> {\n`;
         ret += this.getAllHttpMethods().map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
 
         for (let C of classData.classes) {
-            ret += 'class "' + C.name.resource + '" as ' + C.name.rpath + ' << (R, orange) >> {\n';
+            ret += `class " ${C.name.resource}" as ${C.name.rpath} << (R, orange) >> {\n`;
             ret += C.methods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
+            for (let M of C.methods) {
+                ret += `class " ${M.toUpperCase()} ${C.name.resource}" as ${M}-${C.name.rpath} {\n`;
+                ret += '}\n';
+                classData.paths.push(`"${C.name.rpath}" o-- "${M}-${C.name.rpath}"`);
+            }
         }
 
         ret += 'HTTP o-- _api_\n';
@@ -511,7 +516,7 @@ class Puml extends Diagram {
                 }
                 paths.push(pstr);
 
-                obj.name = {resource: segs[S], rpath: pstr};
+                obj.name = {resource: P, rpath: pstr};
                 obj.methods = [];
                 if (prev === '_api_') {
                     ret.paths.push('"' + prev + '" o-- "' + pstr + '"');
