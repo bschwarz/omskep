@@ -1,3 +1,4 @@
+const Openapi = require('@laag/openapi');
 const diag = require('./omskep-diagram.js');
 const od = require('./omskep-data.js');
 const Diagram = diag.Diagram;
@@ -46,16 +47,19 @@ class Puml extends Diagram {
         'superhero-outline', 'hacker', 'resume-light', 'bluegray', 
         'silver', 'black-knight', 'lightgray', 'metal', 'sketchy-outline',
         'sketchy', 'spacelab', 'minty', 'sandstone', 'united'];
-        let ret = '!include ';
+        // let ret = '!include ';
+        let ret = '';
         if (!this._theme) return '';
         //
-        // Check if the theme exists, and if it does then add the inlcude url
+        // Check if the theme exists, and if it does then add the include url
         // for the puml markup
         //
         if (pumlthemes.includes(this._theme)) {
-            ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this._theme}/puml-theme-${this._theme}.puml`;
+            // ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this._theme}/puml-theme-${this._theme}.puml`;
+            ret += `!theme ${this._theme}\n\n`;
         } else {
-            ret += this._theme;
+            // ret += this._theme;
+            ret += `!include ${this._theme}\n\n`;
         }
         
         return ret;
@@ -200,9 +204,10 @@ class Puml extends Diagram {
         // for the puml markup
         //
         if (pumlthemes.includes(this.theme)) {
-            ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this.theme}/puml-theme-${this.theme}.puml`;
+            // ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this.theme}/puml-theme-${this.theme}.puml`;
+            ret += `!theme ${this.theme}\n\n`;
         } else {
-            ret += this.theme;
+            ret += `!include ${this.theme}\n\n`;
         }
         
         return ret;
