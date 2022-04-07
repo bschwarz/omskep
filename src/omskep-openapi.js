@@ -4,7 +4,7 @@
 //
 
 let openapi3 = {
-   
+
     /**
     * Retrieves the title for the API from the openapi3 document
     */
@@ -122,6 +122,57 @@ let openapi3 = {
     */
     getBasePath() {
         return this.defn.servers ? this.defn.servers[0] : {};
+    },
+    /**
+     * generate a list of objects where each object represents a resource
+     * and it's methods
+     *
+     * @return {Array} - array of resources and methods
+     * @memberof Openapi
+     */
+     getOperationSummary() {
+        let ret = [];
+        for (let P of this.getPaths()) {
+            let path = this.defn.paths[P];
+            let obj = {};
+            let methods = Object.keys(path);
+            for (let M of methods) {
+                if (this._httpMethods.includes(M)) {
+                    obj = {resource: P};
+                    obj.method = M;
+                    obj.description = path[M].description || '';
+                    obj.summary = path[M].summary || '';
+                    obj.operationId = path[M].operationId || '';
+                    obj.deprecated = path[M].deprecated || false;
+                    obj.tags = path[M].tags || [];
+                    ret.push(obj);
+                }
+            }
+        }
+        return ret;
+    },
+    /**
+    * Retrieves the paths object
+    * @returns (String) - returns object containing the path information
+    */
+     getPath(path) {
+        return this.dictKeysExists(this.doc, 'paths', path) ? this.doc.paths[path] : {};
+    },
+    /**
+    * Helper method to see if keys exist in an object
+    * A variable number of args are passed in
+    * @returns (Boolean) - returns boolean if nested keys exist
+    */
+     dictKeysExists() {
+        let dict = {...arguments[0]};
+        for (let i = 1; i < arguments.length; i++) {
+            if (typeof dict[arguments[i]] === 'undefined') {
+                return false;
+            }
+            dict = {...dict[arguments[i]]};
+        }
+
+        return true;
     }
 }
 
