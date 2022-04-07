@@ -47,7 +47,6 @@ class Puml extends Diagram {
         'superhero-outline', 'hacker', 'resume-light', 'bluegray', 
         'silver', 'black-knight', 'lightgray', 'metal', 'sketchy-outline',
         'sketchy', 'spacelab', 'minty', 'sandstone', 'united'];
-        // let ret = '!include ';
         let ret = '';
         if (!this._theme) return '';
         //
@@ -55,10 +54,8 @@ class Puml extends Diagram {
         // for the puml markup
         //
         if (pumlthemes.includes(this._theme)) {
-            // ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this._theme}/puml-theme-${this._theme}.puml`;
             ret += `!theme ${this._theme}\n\n`;
         } else {
-            // ret += this._theme;
             ret += `!include ${this._theme}\n\n`;
         }
         
@@ -185,34 +182,6 @@ class Puml extends Diagram {
         
         return this.substVariables(ret, opid);
     }
-   /**
-    * Determines the theme to use
-    */
-    getTheme() {
-        //
-        // These are the available themes at puml-themes
-        //
-        let pumlthemes = ['aws-orange', 'cerulean', 'cerulean-outline', 'materia', 
-        'materia-outline', 'cyborg', 'cyborg-outline', 'superhero', 
-        'superhero-outline', 'hacker', 'resume-light', 'bluegray', 
-        'silver', 'black-knight', 'lightgray', 'metal', 'sketchy-outline',
-        'sketchy', 'spacelab', 'minty', 'sandstone', 'united'];
-        let ret = '!include ';
-        if (!this.theme) return '';
-        //
-        // Check if the theme exists, and if it does then add the inlcude url
-        // for the puml markup
-        //
-        if (pumlthemes.includes(this.theme)) {
-            // ret += `https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/${this.theme}/puml-theme-${this.theme}.puml`;
-            ret += `!theme ${this.theme}\n\n`;
-        } else {
-            ret += `!include ${this.theme}\n\n`;
-        }
-        
-        return ret;
-    }
-
     /**
     * Generates the mindmap markdown, include start/end tags and any configs
     * @param {boolean} versionSeparate - should the version be in a separate node (true)? Or concatenated with API name (false)?
