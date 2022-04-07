@@ -426,8 +426,9 @@ class Puml extends Diagram {
 
     /**
     * Generates the class markdown, include start/end tags and any configs
+    * @param {string} level - what level to display in the tree (all, operation, resource)
     */
-    class() {
+    class(level='operation') {
         let classData = this.classItems();
         let ret = '@startuml' + '\n';
 
@@ -436,6 +437,7 @@ class Puml extends Diagram {
         ret += 'hide empty members\n';
         ret += this.skinparam('global');
         ret += this.skinparam('class');
+        ret += 'skinparam packageStyle rectangle\n';
         if (this.title) {
             ret += `title ${this.getTitle()} ${this.getVersion()}\n`;
         }
@@ -446,12 +448,75 @@ class Puml extends Diagram {
         ret += this.getAllHttpMethods().map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
 
         for (let C of classData.classes) {
+            //
+            // Generate the resource level entities
+            //
             ret += `class " ${C.name.resource}" as ${C.name.alias} << (R, orange) >> {\n`;
-            ret += C.methods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
-            for (let M of C.methods) {
-                ret += `class " ${M.toUpperCase()} ${C.name.resource}" as ${M}-${C.name.alias} {\n`;
+            for (let RM of C.methods) {
+                let op = `${RM.toUpperCase()} ()`;
+                if (this.isOperationDeprecated(C.name.resource, RM)) {
+                    op = `-- ${RM.toUpperCase()} ()--`;
+                }
+                ret += `+ <i> ${op}</i>\n`;
+            }
+            ret += '\n}\n';
+            if (level === 'all' || level === 'operation') {
+                for (let M of C.methods) {
+                    //
+                    // Generate the operation level entities
+                    //
+                    let m = M.toLowerCase();
+                    let title = `${M.toUpperCase()} ${C.name.resource}`;
+                    if (this.isOperationDeprecated(C.name.resource, m)) {
+                        title = `--${M.toUpperCase()} ${C.name.resource}--`;
+                    }
+                    ret += `class " ${title}" as ${M}-${C.name.alias} {\n`;
+                    ret += `..request params..\n`;
+                    for (let P of this.getOperationParameters(C.name.resource, m, 'all')) {
+                        ret += `+ ${P.name} [${P.location}]\n`;
+                    }
+                    ret += `..body..\n`;
+                    ret += `..responses..\n`;
+                    for (let S of this.getStatusCodes(C.name.resource, m)) {
+                        let media = this.getOperationResponseMedia(C.name.resource, m, S.code);
+                        let resp = this.getOperationResponse(C.name.resource, m, S.code);
+                        if (media.length) {
+                            if (resp.content[media[0]].schema['$ref']) {
+                                let schema = resp.content[media[0]].schema['$ref'].split('/');
+                                let sname = schema[schema.length - 1];
+                                ret += `${S.code}: ${sname}\n`;
+                                if (level === 'all') {
+                                    classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
+                                }
+                            } else {
+                                if (resp.content[media[0]].schema['type'] && resp.content[media[0]].schema['type'] === 'array') {
+                                    if (resp.content[media[0]].schema['items']['$ref']) {
+                                        let schema = resp.content[media[0]].schema['items']['$ref'].split('/');
+                                        let sname = schema[schema.length - 1];
+                                        ret += `${S.code}: [ ${sname} ]\n`;
+                                        if (level === 'all') {
+                                            classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
+                                        }
+                                    } else {
+                                        ret += `${S.code}: <i> inline schema</i>\n`;
+                                    }
+                                } else {
+                                    ret += `${S.code}: Not DefinedXX\n`;
+                                }
+                            }
+                        } else {
+                            ret += `${S.code}: None\n`;
+                        }
+                    }
+                    ret += '}\n';
+                    classData.paths.push(`"${C.name.alias}" o-- "${M}-${C.name.alias}"`);
+                }
+            }
+        }
+        if (level === 'all') {
+            for (let S of Object.keys(this.getComponentsSchemas())) {
+                ret += `class " ${S}" as ${S} << (S, red) >>{\n`;
                 ret += '}\n';
-                classData.paths.push(`"${C.name.alias}" o-- "${M}-${C.name.alias}"`);
             }
         }
 
@@ -482,7 +547,7 @@ class Puml extends Diagram {
             let obj = {};
             let alias = P.replace(/\{|\}/g, '_');
             obj.name = {resource: P, alias: alias};
-            obj.methods = Object.keys(this.defn.paths[P]);
+            obj.methods = Object.keys(this.defn.paths[P]).filter(x => Puml.httpMethods.includes(x));
             ret.classes.push(obj);
             ret.paths.push('"' + prev + '" <-- "' + alias + '"');
         }
