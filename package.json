@@ -19,6 +19,7 @@
     "omskep": "./bin/omskep-cli"
   },
   "dependencies": {
+    "@laag/openapi": "^1.7.0",
     "plantuml-encoder": "^1.4.0"
   },
   "devDependencies": {
