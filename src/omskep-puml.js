@@ -444,6 +444,15 @@ class Puml extends Diagram {
         ret += this.skinparam('global');
         ret += this.skinparam('class');
         ret += 'skinparam packageStyle rectangle\n';
+        ret += 'skinparam packageStyle rectangle\n';
+        ret += 'skinparam defaultFontName        "Verdana"\n';
+        ret += 'skinparam defaultFontSize        12\n';
+        ret += 'skinparam dpi                    100\n';
+        ret += 'skinparam shadowing              false\n';
+        ret += 'skinparam roundcorner            15\n';
+        ret += 'skinparam Padding                1\n';
+        ret += 'skinparam class {\nBorderColor #cccccc\n}\n';
+
         if (this.title) {
             ret += `title ${this.getTitle()} ${this.getVersion()}\n`;
         }
