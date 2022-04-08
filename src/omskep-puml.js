@@ -17,6 +17,11 @@ class Puml extends Diagram {
         this._showLegend = false;
         this._theme = null;
         this.value = '';
+        this.classStart = 'http';
+        this.validClassStart = ['http', 'api', 'resource'];
+        this.classEnd = 'resource';
+        this.validClassEnd = ['resource', 'operation', 'schema'];
+        this.classGroupingNumber = 5;
         this._httpMethods = ['get', 'post', 'put', 'delete', 'patch', 'head'];
         this.pumlserver = 'www.plantuml.com/plantuml';
         let doctypeMap = {'openapi3': {'file': 'omskep-openapi', 'entry': 'openapi3'},
@@ -428,9 +433,10 @@ class Puml extends Diagram {
     * Generates the class markdown, include start/end tags and any configs
     * @param {string} level - what level to display in the tree (all, operation, resource)
     */
-    class(level='operation') {
-        let classData = this.classItems();
+    class(resource=null) {
+        let classData = this.classItems(resource);
         let ret = '@startuml' + '\n';
+        let resourceSchemaMap = {};
 
         ret += this.theme + '\n\n';
         ret += Puml.httpMethodColors + '\n';
@@ -442,85 +448,111 @@ class Puml extends Diagram {
             ret += `title ${this.getTitle()} ${this.getVersion()}\n`;
         }
 
-        ret += 'interface " HTTP/1.1" as HTTP {\n';
-        ret += Puml.httpMethods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
-        ret += `interface " ${this.getTitle()} ${this.getVersion()}" as _api_  << (A, orange) >> {\n`;
-        ret += this.getAllHttpMethods().map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
-
+        if (this.classStart === 'http' && ! resource) {
+            ret += 'interface " HTTP/1.1" as HTTP {\n';
+            ret += Puml.httpMethods.map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
+        }
+        if ((this.classStart === 'http' || this.classStart === 'api') && ! resource) {
+            ret += `interface " ${this.getTitle()} ${this.getVersion()}" as _api_  << (A, orange) >> {\n`;
+            ret += this.getAllHttpMethods().map(x => `+ <i> ${x.toUpperCase()} ()</i>`).join('\n') + '\n}\n';
+        }
         for (let C of classData.classes) {
             //
             // Generate the resource level entities
             //
-            ret += `class " ${C.name.resource}" as ${C.name.alias} << (R, orange) >> {\n`;
-            for (let RM of C.methods) {
-                let op = `${RM.toUpperCase()} ()`;
-                if (this.isOperationDeprecated(C.name.resource, RM)) {
-                    op = `-- ${RM.toUpperCase()} ()--`;
+            if (resource === null || C.name.resource === resource) {
+                // console.log(C.methods);
+                resourceSchemaMap[C.name.resource] = [];
+                ret += `class " ${C.name.resource}" as ${C.name.alias} << (R, orange) >> {\n`;
+                for (let RM of C.methods) {
+                    let op = `${RM.toUpperCase()} ()`;
+                    if (this.isOperationDeprecated(C.name.resource, RM)) {
+                        op = `-- ${RM.toUpperCase()} ()--`;
+                    }
+                    ret += `+ <i> ${op}</i>\n`;
                 }
-                ret += `+ <i> ${op}</i>\n`;
-            }
-            ret += '\n}\n';
-            if (level === 'all' || level === 'operation') {
-                for (let M of C.methods) {
-                    //
-                    // Generate the operation level entities
-                    //
-                    let m = M.toLowerCase();
-                    let title = `${M.toUpperCase()} ${C.name.resource}`;
-                    if (this.isOperationDeprecated(C.name.resource, m)) {
-                        title = `--${M.toUpperCase()} ${C.name.resource}--`;
-                    }
-                    ret += `class " ${title}" as ${M}-${C.name.alias} {\n`;
-                    ret += `..request params..\n`;
-                    for (let P of this.getOperationParameters(C.name.resource, m, 'all')) {
-                        ret += `+ ${P.name} [${P.location}]\n`;
-                    }
-                    ret += `..body..\n`;
-                    ret += `..responses..\n`;
-                    for (let S of this.getStatusCodes(C.name.resource, m)) {
-                        let media = this.getOperationResponseMedia(C.name.resource, m, S.code);
-                        let resp = this.getOperationResponse(C.name.resource, m, S.code);
-                        if (media.length) {
-                            if (resp.content[media[0]].schema['$ref']) {
-                                let schema = resp.content[media[0]].schema['$ref'].split('/');
-                                let sname = schema[schema.length - 1];
-                                ret += `${S.code}: ${sname}\n`;
-                                if (level === 'all') {
-                                    classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
-                                }
-                            } else {
-                                if (resp.content[media[0]].schema['type'] && resp.content[media[0]].schema['type'] === 'array') {
-                                    if (resp.content[media[0]].schema['items']['$ref']) {
-                                        let schema = resp.content[media[0]].schema['items']['$ref'].split('/');
-                                        let sname = schema[schema.length - 1];
-                                        ret += `${S.code}: [ ${sname} ]\n`;
-                                        if (level === 'all') {
-                                            classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
-                                        }
-                                    } else {
-                                        ret += `${S.code}: <i> inline schema</i>\n`;
+                ret += '\n}\n';
+                if (this.classEnd === 'schema' || this.classEnd === 'operation') {
+                    for (let M of C.methods) {
+                        //
+                        // Generate the operation level entities
+                        //
+                        let m = M.toLowerCase();
+                        let title = `${M.toUpperCase()} ${C.name.resource}`;
+                        if (this.isOperationDeprecated(C.name.resource, m)) {
+                            title = `--${M.toUpperCase()} ${C.name.resource}--`;
+                        }
+                        ret += `class " ${title}" as ${M}-${C.name.alias} {\n`;
+                        ret += `..request params..\n`;
+                        for (let P of this.getOperationParameters(C.name.resource, m, 'all')) {
+                            ret += `+ ${P.name} [${P.location}]\n`;
+                        }
+                        ret += `..body..\n`;
+                        ret += `..responses..\n`;
+                        for (let S of this.getStatusCodes(C.name.resource, m)) {
+                            let media = this.getOperationResponseMedia(C.name.resource, m, S.code);
+                            let resp = this.getOperationResponse(C.name.resource, m, S.code);
+                            if (media.length) {
+                                if (resp.content[media[0]].schema['$ref']) {
+                                    let schema = resp.content[media[0]].schema['$ref'].split('/');
+                                    let sname = schema[schema.length - 1];
+                                    ret += `${S.code}: ${sname}\n`;
+                                    if (this.classEnd === 'schema') {
+                                        classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
                                     }
                                 } else {
-                                    ret += `${S.code}: Not DefinedXX\n`;
+                                    if (resp.content[media[0]].schema['type'] && resp.content[media[0]].schema['type'] === 'array') {
+                                        if (resp.content[media[0]].schema['items']['$ref']) {
+                                            let schema = resp.content[media[0]].schema['items']['$ref'].split('/');
+                                            let sname = schema[schema.length - 1];
+                                            ret += `${S.code}: [ ${sname} ]\n`;
+                                            if (this.classEnd === 'schema') {
+                                                classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
+                                                resourceSchemaMap[C.name.resource].push(sname);
+                                            }
+                                        } else {
+                                            ret += `${S.code}: <i> inline schema</i>\n`;
+                                        }
+                                    } else if (resp.content[media[0]].schema.allOf) {
+                                        let label = S.code + ':';
+                                        // ret += `${S.code} `;
+                                        for (let AS of resp.content[media[0]].schema.allOf) {
+                                            let schema = AS['$ref'].split('/');
+                                            let sname = schema[schema.length - 1];
+                                            ret += `${label} ${sname}\n`;
+                                            if (this.classEnd === 'schema') {
+                                                classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
+                                                resourceSchemaMap[C.name.resource].push(sname);
+                                            }
+                                            label = '.....:';
+                                        }
+                                        // ret += '\n';
+                                    } else {
+                                        ret += `${S.code}: None\n`;
+                                    }
                                 }
+                            } else {
+                                ret += `${S.code}: None\n`;
                             }
-                        } else {
-                            ret += `${S.code}: None\n`;
                         }
+                        ret += '}\n';
+                        classData.paths.push(`"${C.name.alias}" o-- "${M}-${C.name.alias}"`);
                     }
-                    ret += '}\n';
-                    classData.paths.push(`"${C.name.alias}" o-- "${M}-${C.name.alias}"`);
                 }
             }
         }
-        if (level === 'all') {
+        if (this.classEnd === 'schema') {
             for (let S of Object.keys(this.getComponentsSchemas())) {
-                ret += `class " ${S}" as ${S} << (S, red) >>{\n`;
-                ret += '}\n';
+                if (! resource || (resourceSchemaMap[resource] && resourceSchemaMap[resource].includes(S))) {
+
+                    ret += `class " ${S}" as ${S} << (S, red) >>{\n`;
+                    ret += '}\n';
+                }
             }
         }
-
-        ret += 'HTTP o-- _api_\n';
+        if (this.classStart === 'http' && ! resource) {
+            ret += 'HTTP o-- _api_\n';
+        }
         ret += classData.paths.map(x => x).join('\n');
         ret += '\n@enduml';
 
@@ -531,25 +563,34 @@ class Puml extends Diagram {
     /**
     *This generates the class data used to generate the markdown for class diagrams
     */
-    classItems() {
+    classItems(resource=null) {
         let paths = [];
         let pstr = '/';
-        let cnt = 0;
+        let cnt = 2;
         let ret = {classes: [], paths: []};
         let prev = '_api_';
         let given_paths = this.getPaths(this.defn.paths);
+        let arrow = '-';
 
         //
         // Loop over paths in the swagger file, assuming the paths
         // were sorted from the getPaths function
         //
+        let div = Math.ceil(given_paths.length / this.classGroupingNumber) + 1;
         for (let P of given_paths) {
-            let obj = {};
-            let alias = P.replace(/\{|\}/g, '_');
-            obj.name = {resource: P, alias: alias};
-            obj.methods = Object.keys(this.defn.paths[P]).filter(x => Puml.httpMethods.includes(x));
-            ret.classes.push(obj);
-            ret.paths.push('"' + prev + '" <-- "' + alias + '"');
+            if (resource === null || P === resource) {
+
+                let offset = cnt / div;
+                let obj = {};
+                let alias = P.replace(/\{|\}/g, '_');
+                obj.name = {resource: P, alias: alias};
+                obj.methods = Object.keys(this.defn.paths[P]).filter(x => Puml.httpMethods.includes(x));
+                ret.classes.push(obj);
+                if (! resource) {
+                    ret.paths.push(`"${prev}" <${arrow.repeat(cnt)} "${alias}"`);
+                }
+                cnt = (cnt >= div) ? 2 : (cnt + 1);
+            }
         }
 
         return ret;
