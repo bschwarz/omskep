@@ -19,7 +19,7 @@ class Puml extends Diagram {
         this.value = '';
         this.classStart = 'http';
         this.validClassStart = ['http', 'api', 'resource'];
-        this.classEnd = 'resource';
+        this.classEnd = 'schema';
         this.validClassEnd = ['resource', 'operation', 'schema'];
         this.classGroupingNumber = 5;
         this._httpMethods = ['get', 'post', 'put', 'delete', 'patch', 'head'];
@@ -587,7 +587,7 @@ class Puml extends Diagram {
                 obj.methods = Object.keys(this.defn.paths[P]).filter(x => Puml.httpMethods.includes(x));
                 ret.classes.push(obj);
                 if (! resource) {
-                    ret.paths.push(`"${prev}" <${arrow.repeat(cnt)} "${alias}"`);
+                    ret.paths.push(`"${prev}" o${arrow.repeat(cnt)} "${alias}"`);
                 }
                 cnt = (cnt >= div) ? 2 : (cnt + 1);
             }
