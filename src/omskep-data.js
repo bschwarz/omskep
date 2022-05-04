@@ -43,7 +43,7 @@ const omskepdata = {
     httpMethodColors: [
         {name: 'get', color: '#009fdb', heading: 'GET'},
         {name: 'post', color: '#007a3e', heading: 'POST'},
-        {name: 'put', color: '#ea7400', heading: 'PUT'},
+        {name: 'put', color: '#bb5d00', heading: 'PUT'},
         {name: 'delete', color: '#cf2a2a', heading: 'DELETE'},
         {name: 'patch', color: '#b5bd00', heading: 'PATCH'},
         {name: 'head', color: '#9012fe', heading: 'HEAD'},
