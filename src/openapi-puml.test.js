@@ -1,11 +1,11 @@
 const fs = require('fs');
-const puml = require('./omskep-puml.js');
+const { Puml } = require('./omskep-puml.js');
 
 let diag = null;
 
 beforeEach(() => {
     let data = fs.readFileSync('examples/petstore-openapi3.json', 'utf8');
-    diag = new puml.Puml(data);
+    diag = new Puml(data);
 });
 
 test('Get Title of the Openapi Definition', () => {
