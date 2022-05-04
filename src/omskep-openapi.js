@@ -238,6 +238,23 @@ let openapi3 = {
          return ret;
     },
     /**
+    * gets the media types for an operation response
+    * @param {string} path - the path segment of the resource
+    * @param {string} verb - HTTP verb of the operation
+    * @param {integer} code - HTTP status code of the operation
+    */
+     getOperationRequestMedia(path, verb) {
+         let ret = [];
+         verb = verb.toLocaleLowerCase();
+         if (! this.operationExists(path, verb)) return [];
+         
+         if (this.dictKeysExists(this.defn.paths[path][verb],'requestBody', 'content')) {
+             ret = Object.keys(this.defn.paths[path][verb]['requestBody']['content']);
+         }
+ 
+         return ret;
+    },
+    /**
     * gets the parameters for an operation
     * @param {string} path - the path of the resource
     * @param {string} verb - HTTP verb of the operation. If 'path' is specified, then it just gets the parameters that are for all methods of a path
