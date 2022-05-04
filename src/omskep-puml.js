@@ -492,12 +492,12 @@ class Puml extends Diagram {
                             title = `--${M.toUpperCase()} ${C.name.resource}--`;
                         }
                         ret += `class " ${title}" as ${M}-${C.name.alias} {\n`;
-                        ret += `..request params..\n`;
+                        ret += `==request params==\n`;
                         for (let P of this.getOperationParameters(C.name.resource, m, 'all')) {
                             ret += `+ ${P.name} [${P.location}]\n`;
                         }
-                        ret += `..body..\n`;
-                        ret += `..responses..\n`;
+                        ret += `==request body==\n`;
+                        ret += `==responses==\n`;
                         for (let S of this.getStatusCodes(C.name.resource, m)) {
                             let media = this.getOperationResponseMedia(C.name.resource, m, S.code);
                             let resp = this.getOperationResponse(C.name.resource, m, S.code);
@@ -537,11 +537,11 @@ class Puml extends Diagram {
                                         }
                                         // ret += '\n';
                                     } else {
-                                        ret += `${S.code}: None\n`;
+                                        ret += `${S.code}: --\n`;
                                     }
                                 }
                             } else {
-                                ret += `${S.code}: None\n`;
+                                ret += `${S.code}: --\n`;
                             }
                         }
                         ret += '}\n';
