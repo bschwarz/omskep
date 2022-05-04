@@ -497,10 +497,54 @@ class Puml extends Diagram {
                             ret += `+ ${P.name} [${P.location}]\n`;
                         }
                         ret += `==request body==\n`;
+                        let media = this.getOperationRequestMedia(C.name.resource, m);
+                        let resp = this.getOperationRequest(C.name.resource, m);
+                        if (media.length) {
+                            if (resp.content[media[0]].schema['$ref']) {
+                                let schema = resp.content[media[0]].schema['$ref'].split('/');
+                                let sname = schema[schema.length - 1];
+                                ret += `${sname}\n`;
+                                if (this.classEnd === 'schema') {
+                                    classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
+                                }
+                            } else {
+                                if (resp.content[media[0]].schema['type'] && resp.content[media[0]].schema['type'] === 'array') {
+                                    if (resp.content[media[0]].schema['items']['$ref']) {
+                                        let schema = resp.content[media[0]].schema['items']['$ref'].split('/');
+                                        let sname = schema[schema.length - 1];
+                                        ret += `[ ${sname} ]\n`;
+                                        if (this.classEnd === 'schema') {
+                                            classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
+                                            resourceSchemaMap[C.name.resource].push(sname);
+                                        }
+                                    } else {
+                                        ret += `<i> inline schema</i>\n`;
+                                    }
+                                } else if (resp.content[media[0]].schema.allOf) {
+                                    let label = '';
+                                    // ret += `${S.code} `;
+                                    for (let AS of resp.content[media[0]].schema.allOf) {
+                                        let schema = AS['$ref'].split('/');
+                                        let sname = schema[schema.length - 1];
+                                        ret += `${label} ${sname}\n`;
+                                        if (this.classEnd === 'schema') {
+                                            classData.paths.push(`"${M}-${C.name.alias}" o-- "${sname}"`);
+                                            resourceSchemaMap[C.name.resource].push(sname);
+                                        }
+                                        label = '.....:';
+                                    }
+                                    // ret += '\n';
+                                } else {
+                                    ret += `\n`;
+                                }
+                            }
+                        } else {
+                            ret += `\n`;
+                        }
                         ret += `==responses==\n`;
                         for (let S of this.getStatusCodes(C.name.resource, m)) {
-                            let media = this.getOperationResponseMedia(C.name.resource, m, S.code);
-                            let resp = this.getOperationResponse(C.name.resource, m, S.code);
+                            media = this.getOperationResponseMedia(C.name.resource, m, S.code);
+                            resp = this.getOperationResponse(C.name.resource, m, S.code);
                             if (media.length) {
                                 if (resp.content[media[0]].schema['$ref']) {
                                     let schema = resp.content[media[0]].schema['$ref'].split('/');
